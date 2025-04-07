@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package user_package;
+
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
+  rpc CheckUserLogin (CheckUserLoginRequest) returns (CheckUserLoginResponse); 
+  rpc GetUserById (UserIdRequest) returns (UserResponse);
+  rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
+  rpc DeleteUser (UserIdRequest) returns (DeleteUserResponse);
+  rpc ResendOtp (ResendOtpRequest) returns (ResendOtpResponse);
+  rpc CheckGoogleSignIn (CheckGoogleSignInRequest) returns (CheckGoogleSignInResponse);
+  rpc GetAllUsers (EmptyRequest) returns (GetAllUsersResponse);
+  rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
+}
+
+message ResendOtpRequest {  
+  string email = 1;
+  string name = 2;
+}
+
+message ResendOtpResponse { 
+  string message = 1;
+  string token = 2;
+}
+
+
+message CheckUserLoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message CheckUserLoginResponse {
+  string message = 1;
+  string token = 2;
+  string name = 3;
+  string refreshToken = 4;
+  bool isAdmin = 5;
+  bool isActive=6;
+}
+
+
+message CheckGoogleSignInRequest {
+  string googleID = 1;
+  string email = 2;
+  string name = 3;
+  string profileImage = 4;
+}
+
+message CheckGoogleSignInResponse {
+  string message = 1;
+  string token = 2;
+  string name = 3;
+  string refreshToken = 4;
+  bool isAdmin = 5;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string profileImage = 4;
+  string googleID = 5;
+  bool isActive = 6;
+  string password = 7;
+  Address address = 8;
+  bool isAdmin = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
+  Wallet wallet = 12;
+}
+
+
+message Address {
+  string city = 1;
+  int32 pinCode = 2;
+  string state = 3;
+  string street = 4;
+}
+
+
+message Wallet {
+  int32 balance = 1;
+  repeated Transaction transactions = 2;
+}
+
+
+message Transaction {
+  int32 amount = 1;
+  string date = 2;
+  string details = 3;
+  string paymentMethod = 4; // Possible values: 'UPI | Wallet | COD'
+}
+
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string profileImage = 3;
+  string googleID = 4;
+  bool isActive = 5;
+  string password = 6;
+  Address address = 7;
+  bool isAdmin = 8;
+  string otp = 9;
+  string token = 10;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string profileImage = 4;
+  bool isActive = 5;
+  Address address = 6;
+}
+
+message UserIdRequest {
+  string id = 1;
+}
+
+message UserResponse {
+ string message = 1;
+ bool isAdmin = 2;
+}
+
+message DeleteUserResponse {
+  string message = 1;
+}
+
+message CheckUserRequest {
+    string email = 1;
+}
+
+message CheckUserResponse {
+    string message = 1;
+    string token = 2;
+
+}
+
+message EmptyRequest {}
+
+message GetAllUsersResponse {
+  repeated User users = 1;
+}
+
+message BlockUserRequest {
+  string userId = 1;
+}
+
+message BlockUserResponse {
+  bool success = 1;
+  string message = 2;
+}
