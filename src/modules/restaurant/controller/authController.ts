@@ -5,9 +5,7 @@ import { AuthResponse, Message } from '../../../interfaces/interface'
 export default class restaurantAuthController {
 
     checkRegistration = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            console.log('------------------------');
-            
+        try {           
             const { email, mobile } = req.body
             const operation = 'Registration-check'
             const response: Message = (await restaurantRabbitMqClient.produce(
@@ -155,7 +153,7 @@ export default class restaurantAuthController {
 
     resubmitRestaurantDocuments = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('ethiiiiiiiiiii :', req.body);
+            // console.log('ethiiiiiiiiiii :', req.body);
             const { restaurantId, idProof, fssaiLicense, businessCertificate, bankAccountNumber, ifscCode } = req.body
             const operation = 'Restaurant-Documents-Re-Submission'
             const response: Message = (await restaurantRabbitMqClient.produce({
@@ -167,7 +165,7 @@ export default class restaurantAuthController {
                 ifscCode
             }, operation)) as Message
 
-            console.log('RESPONSEEEEEEEEEEE',response)
+            // console.log('RESPONSEEEEEEEEEEE',response)
             res.status(200).json(response)  
 
         } catch (error) {
