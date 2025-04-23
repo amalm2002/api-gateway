@@ -14,10 +14,12 @@ message RefreshReq{
 message RefreshRes{
   string access_token = 1;
   string refresh_token = 2;
+  string message = 3;
 }
 
 message AuthReq {
   string token = 1;
+  string role = 2;
 }
 
 message AuthRes {

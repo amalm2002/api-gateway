@@ -10,18 +10,22 @@ export interface AuthResponse {
   isAdmin: boolean;
   refreshToken: string;
   token: string;
-  _id: string
-  isActive:boolean
+  _id: string;
+  isActive:boolean;
+  role:string;
 }
 
 
 export interface UserCredentials {
   userId: string;
   isAdmin: boolean;
+  role:string;
+  message:string;
 }
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
+  message:string;
 }
 
 export interface UserInterface extends Document {

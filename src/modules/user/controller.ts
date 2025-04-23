@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { UserService } from './config/user.client'
 import { AuthResponse } from '../../interfaces/interface';
+import { token } from 'morgan';
 
 
 export default class userController {
@@ -107,8 +108,9 @@ export default class userController {
             message: result.message,
             token: result.token,
             refreshToken: result.refreshToken,
-            isAdmin:result.isAdmin,
-            isActive:result.isActive
+            isAdmin: result.isAdmin,
+            isActive: result.isActive,
+            role: result.role
           })
         }
       })
@@ -137,7 +139,10 @@ export default class userController {
               user_id: result._id,
               message: result.message,
               token: result.token,
-              refreshToken: result.refreshToken
+              refreshToken: result.refreshToken,
+              isAdmin: result.isAdmin,
+              isActive: result.isActive,
+              role: result.role
             })
           }
         }
@@ -148,6 +153,66 @@ export default class userController {
       res.status(500).json({ message: 'internal server error on google signin side' })
     }
 
+  }
+
+  ForgotPasswordCheck = async (req: Request, res: Response) => {
+    try {
+      // console.log('ForgotPasswordCheck request:', req.body);
+      UserService.ForgotPasswordUser(req.body, (err: any, result: { message: string; token?: string }) => {
+        if (err) {
+          console.error('Error in ForgotPasswordCheck:', err);
+          return res.status(400).json({ message: err.message || 'Error checking email' });
+        }
+
+        if (result.message === 'user exist' && result.token) {
+          res.cookie('otp', result.token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 60 * 1000),
+            sameSite: 'none',
+            secure: true,
+          });
+          return res.status(200).json({ message: 'OTP sent successfully', token: result.token });
+        } else {
+          return res.status(404).json({ message: result.message });
+        }
+      });
+    } catch (error) {
+      console.error('Error in ForgotPasswordCheck:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  VerifyOtp = async (req: Request, res: Response) => {
+    try {
+      // console.log('ivide ethyyyyyyyyyy :', req.body);
+      const { email, otp, token } = req.body
+      UserService.VerifyOtp({ email, otp, token }, (err: any, result: { message: string }) => {
+        if (err) {
+          console.log('error on forgot-pass verify-otp side ', err);
+          return res.status(400).json({ message: err.message || 'Invalid OTP' });
+        }
+        return res.status(200).json({ message: result.message })
+      })
+    } catch (error) {
+      console.error('Error in veify-otp:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+
+  RestPassword = async (req: Request, res: Response) => {
+    try {
+      const { email, password, token } = req.body;
+      UserService.ResetPassword({ email, password, token }, (err: any, result: { message: string }) => {
+        if (err) {
+          console.error('Error resetting password:', err);
+          return res.status(400).json({ message: err.message || 'Failed to reset password' });
+        }
+        return res.status(200).json({ message: result.message });
+      });
+    } catch (error) {
+      console.error('Error in rest-password:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
   }
 
 }

@@ -11,13 +11,13 @@ const restaurantController=new RestaurantController()
 
 const upload=multer()
 
-adminRoute.get('/getAllUsers',isValidated,userController.getAllUsers)
-adminRoute.patch('/block-user/:id',isValidated,userController.blockUsers)
+adminRoute.get('/getAllUsers',userController.getAllUsers)
+adminRoute.patch('/block-user/:id',userController.blockUsers)
 
-adminRoute.get('/getAllRestaurants',isValidated,restaurantController.getAllRestaurants)
-adminRoute.get('/getRestaurant/:id',isValidated,restaurantController.findRestaurantById)
-adminRoute.post('/verifyRestaurantDocs/:id',isValidated,restaurantController.verifyRestaurantDocs)
-adminRoute.post('/rejectedRestaurantDocs',isValidated,restaurantController.rejectedRestaurantDocs)
+adminRoute.get('/getAllRestaurants',restaurantController.getAllRestaurants)
+adminRoute.get('/getRestaurant/:id',restaurantController.findRestaurantById)
+adminRoute.post('/verifyRestaurantDocs/:id',restaurantController.verifyRestaurantDocs)
+adminRoute.post('/rejectedRestaurantDocs',restaurantController.rejectedRestaurantDocs)
 
 
 export default adminRoute

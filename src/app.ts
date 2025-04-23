@@ -7,10 +7,11 @@ import http from 'http';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 
-import userRoute from "./modules/user/route";
-import resturantRoute from "./modules/restaurant/route"
+import {publicRoute,protectedRoute} from "./modules/user/route";
+import {publicRestaurantRoute,protectedRestaurantRoute} from "./modules/restaurant/route"
 import authRoute from "./modules/auth/route"
 import adminRoute from "./modules/admin/route";
+import { isValidated } from "./modules/auth/controller";
 
 class App {
   public app: Application;
@@ -38,10 +39,15 @@ class App {
   }
 
   private routes(): void {
-    this.app.use("/api/user", userRoute);
-    this.app.use("/api/restaurant", resturantRoute);
-    this.app.use('/api/auth',authRoute)
+    //public route   
+    this.app.use("/api/user",publicRoute);
+    this.app.use("/api/restaurant", publicRestaurantRoute);
     this.app.use('/api/admin',adminRoute)
+    //protected route 
+    this.app.use('/api/auth',authRoute)
+    this.app.use("/api/user",isValidated('User'),protectedRoute);
+    this.app.use("/api/restaurant",isValidated('Restaurant'), protectedRestaurantRoute);
+    this.app.use('/api/admin',isValidated('Admin'),adminRoute)
   }
 
   public startServer(port: number): void {

@@ -14,6 +14,9 @@ service UserService {
   rpc CheckGoogleSignIn (CheckGoogleSignInRequest) returns (CheckGoogleSignInResponse);
   rpc GetAllUsers (EmptyRequest) returns (GetAllUsersResponse);
   rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
+  rpc ForgotPasswordUser(ForgotPasswordUserRequest) returns (ForgotPasswordUserResponse);
+  rpc VerifyOtp(VerifyOtpRequest) returns (VerifyOtpResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
 }
 
 message ResendOtpRequest {  
@@ -38,9 +41,41 @@ message CheckUserLoginResponse {
   string name = 3;
   string refreshToken = 4;
   bool isAdmin = 5;
-  bool isActive=6;
+  bool isActive = 6;
+  string role = 7;
+  string _id = 8;
 }
 
+message ForgotPasswordUserRequest {
+  string email = 1;
+  string otp = 2;
+  string token = 3;
+}
+
+message ForgotPasswordUserResponse {
+  string message = 1;
+  string token = 2;
+}
+
+message VerifyOtpRequest {
+  string email = 1;
+  string otp = 2;
+  string token = 3;
+}
+
+message VerifyOtpResponse {
+  string message = 1;
+}
+
+message ResetPasswordRequest {
+  string email = 1;
+  string password = 2;
+  string token = 3;
+}
+
+message ResetPasswordResponse {
+  string message = 1;
+}
 
 message CheckGoogleSignInRequest {
   string googleID = 1;
@@ -55,6 +90,8 @@ message CheckGoogleSignInResponse {
   string name = 3;
   string refreshToken = 4;
   bool isAdmin = 5;
+  bool isActive = 6;
+  string role = 7;
 }
 
 message User {

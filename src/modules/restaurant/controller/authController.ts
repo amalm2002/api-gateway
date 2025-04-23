@@ -104,6 +104,25 @@ export default class restaurantAuthController {
         }
     }
 
+    fetchOnlineStatus=async (req:Request,res:Response,next:NextFunction):Promise <void> => {
+        try {
+            const restaurantId=req.params.id
+            const operation='Fetch-Online-Status'
+            const response: Message = (await restaurantRabbitMqClient.produce(
+                restaurantId,
+                operation
+            )) as Message
+            console.log('response on the fetch-Online-status :', response)
+            res.status(200).json(response)
+            
+        } catch (error) {
+            console.log('error on fetch-online-status restaurant', error);
+            res
+                .status(500)
+                .json({ message: "Internal Server Error" });
+        }
+    }
+
     documentSubmission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { restaurant_id, idProofUrl, fssaiLicenseUrl, businessCertificateUrl, bankAccountNumber, ifscCode } = req.body
