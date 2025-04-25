@@ -198,27 +198,34 @@ export default class menuController {
         }
     }
 
-    getAllDishes = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const operation = 'Get-All-Restaurant-Dishes'
-            const response = (await restaurantRabbitMqClient.produce({}, operation)) as Message
-            res.status(200).json(response)
-        } catch (error) {
-            console.log('error on get all details side :', error);
-            res.status(500).json({ message: "Internal Server Error" });
-        }
-    }
+    // getAllDishes = async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+    //         const operation = 'Get-All-Restaurant-Dishes'
+    //         const response = (await restaurantRabbitMqClient.produce({}, operation)) as Message
+    //         res.status(200).json(response)
+    //     } catch (error) {
+    //         console.log('error on get all details side :', error);
+    //         res.status(500).json({ message: "Internal Server Error" });
+    //     }
+    // }
 
+    
     sortMenus = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('bodyyyyyy :', req.body);
-            const operation = 'Sort-Menu-Items'
-            const response = (await restaurantRabbitMqClient.produce(req.body, operation)) as Message
-            res.status(200).json(response)
+            console.log('sortMenus body:', req.body);
+            const { tempSortOption, searchTerm, category } = req.body;
+            const operation = 'Sort-Menu-Items';
+            const response = (await restaurantRabbitMqClient.produce(
+                { sortValue: tempSortOption, searchTerm: searchTerm || '', category: category || 'All' },
+                operation
+            )) as Message;
+            // if (response.error) {
+            //     return res.status(400).json({ message: response.error });
+            // }
+            res.status(200).json(response);
         } catch (error) {
-            console.log('this error has to show on the sort-menu side:', error);
-            res.status(500).json({ message: 'Internal Server Error' })
+            console.log('Error in sortMenus controller:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
         }
-    }
-
+    };
 }

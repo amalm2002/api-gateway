@@ -40,7 +40,7 @@ protectedRestaurantRoute.put('/edit-menu-item/:id', upload.fields([
 publicRestaurantRoute.patch('/menu/:id', MenuController.softDeleteMenu)
 publicRestaurantRoute.get('/restaurant-menus', MenuController.getAllDatas)
 
-protectedRestaurantRoute.get('/get-all-menus',MenuController.getAllDishes)
+// protectedRestaurantRoute.get('/get-all-menus',MenuController.getAllDishes)
 protectedRestaurantRoute.post('/sort-menu',MenuController.sortMenus)
 
 

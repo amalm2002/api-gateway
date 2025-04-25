@@ -9,6 +9,8 @@ service UserService {
   rpc CheckUserLogin (CheckUserLoginRequest) returns (CheckUserLoginResponse); 
   rpc GetUserById (UserIdRequest) returns (UserResponse);
   rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
+  rpc UpdateUserAddress (UpdateUserAddressRequest) returns (AddressResponse);
+  rpc DeleteUserAddress(DeleteAddressRequest) returns (DeleteAddressResponse);
   rpc DeleteUser (UserIdRequest) returns (DeleteUserResponse);
   rpc ResendOtp (ResendOtpRequest) returns (ResendOtpResponse);
   rpc CheckGoogleSignIn (CheckGoogleSignInRequest) returns (CheckGoogleSignInResponse);
@@ -17,7 +19,7 @@ service UserService {
   rpc ForgotPasswordUser(ForgotPasswordUserRequest) returns (ForgotPasswordUserResponse);
   rpc VerifyOtp(VerifyOtpRequest) returns (VerifyOtpResponse);
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
-}
+ }
 
 message ResendOtpRequest {  
   string email = 1;
@@ -28,7 +30,6 @@ message ResendOtpResponse {
   string message = 1;
   string token = 2;
 }
-
 
 message CheckUserLoginRequest {
   string email = 1;
@@ -102,13 +103,33 @@ message User {
   string googleID = 5;
   bool isActive = 6;
   string password = 7;
-  Address address = 8;
+  repeated Address address = 8;
   bool isAdmin = 9;
   string createdAt = 10;
   string updatedAt = 11;
   Wallet wallet = 12;
 }
 
+message UpdateUserAddressRequest {
+  string userId = 1;
+  Address address = 2;
+  int32 index = 3; 
+}
+
+message AddressResponse {
+  string message = 1;
+  Address address = 2;
+}
+
+message DeleteAddressRequest {
+  string id = 1;
+  int32 index = 2;
+}
+
+message DeleteAddressResponse {
+  bool success = 1;
+  string message = 2;
+}
 
 message Address {
   string city = 1;
@@ -117,12 +138,10 @@ message Address {
   string street = 4;
 }
 
-
 message Wallet {
   int32 balance = 1;
   repeated Transaction transactions = 2;
 }
-
 
 message Transaction {
   int32 amount = 1;
@@ -130,7 +149,6 @@ message Transaction {
   string details = 3;
   string paymentMethod = 4; // Possible values: 'UPI | Wallet | COD'
 }
-
 
 message CreateUserRequest {
   string name = 1;
@@ -152,15 +170,32 @@ message UpdateUserRequest {
   string profileImage = 4;
   bool isActive = 5;
   Address address = 6;
+  string phone = 7; 
 }
 
 message UserIdRequest {
   string id = 1;
 }
 
+message UserResponseData {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string profileImage = 4;
+  string googleID = 5;
+  bool isActive = 6;
+  repeated Address address = 7;
+  bool isAdmin = 8;
+  string createdAt = 9;
+  string updatedAt = 10;
+  Wallet wallet = 11;
+  string phone = 12; 
+}
+
 message UserResponse {
- string message = 1;
- bool isAdmin = 2;
+  string message = 1;
+  bool isAdmin = 2;
+  UserResponseData user = 3; 
 }
 
 message DeleteUserResponse {

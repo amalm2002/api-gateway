@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { UserService } from './config/user.client'
 import { AuthResponse } from '../../interfaces/interface';
-import { token } from 'morgan';
+import { log } from '@grpc/grpc-js/build/src/logging';
+
 
 
 export default class userController {
@@ -105,6 +106,7 @@ export default class userController {
           console.log('result of login user :', result);
           res.status(200).json({
             user: result.name,
+            userId: result._id,
             message: result.message,
             token: result.token,
             refreshToken: result.refreshToken,
@@ -215,5 +217,97 @@ export default class userController {
     }
   }
 
+  GetUserById = async (req: Request, res: Response) => {
+    try {
+      UserService.GetUserById({ id: req.params.id }, (err: any, result: any) => {
+        if (err) {
+          res.status(400).json({ message: err.message });
+        } else {
+          console.log(result);
+
+          res.status(200).json({ message: result.message, response: result });
+        }
+      });
+    } catch (error) {
+      console.log('error has to show on the GetUserById controller', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+
+  EditProfile = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { name, phone } = req.body;
+      UserService.UpdateUser({ id, name, phone }, (err: any, result: any) => {
+        if (err) {
+          res.status(400).json({ message: err.message });
+        } else {
+          res.status(200).json({ response: result });
+        }
+      });
+    } catch (error) {
+      console.log('error in EditProfile controller', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  addNewAddress = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+      const { address, index } = req.body;
+
+      UserService.UpdateUserAddress(
+        {
+          userId: id,
+          address: {
+            city: address.city,
+            pinCode: Number(address.pinCode),
+            state: address.state,
+            street: address.street,
+          },
+          index: Number(index),
+        }, (err: any, result: any) => {
+          if (err) {
+            console.log(err);
+
+            res.status(400).json({ message: err.message });
+          } else {
+            res.status(200).json({ message: result.message, response: result });
+          }
+        })
+
+    } catch (error) {
+      console.log('error in add-new-address controller', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+
+  deleteUserAddress = async (req: Request, res: Response) => {
+    try {
+      const { id, index } = req.params
+      const addressIndex = parseInt(index)
+
+      console.log('Params:', req.params);
+
+      console.log(addressIndex, id);
+
+
+      UserService.DeleteUserAddress(
+        { id: req.params.id, index: addressIndex },
+        (err: any, result: any) => {
+          if (err) {
+            res.status(400).json({ message: err.message });
+          } else {
+            res.status(200).json({ success: true, message: result.message });
+          }
+        }
+      );
+
+    } catch (error) {
+      console.log('error has to show on the delete address side', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+
+    }
+  }
 }
 
