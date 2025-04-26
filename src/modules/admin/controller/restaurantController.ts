@@ -3,6 +3,7 @@ import restaurantRabbitMqClient from '../../restaurant/rabbitmq/client'
 import { Message } from "../../../interfaces/interface";
 
 
+
 export default class restaurantController {
 
     getAllRestaurants = async (req: Request, res: Response, next: NextFunction) => {
@@ -57,12 +58,75 @@ export default class restaurantController {
             const response: Message = (await restaurantRabbitMqClient.produce({
                 restaurantId, rejectionReason
             }, operation)) as Message
-            // console.log('RESPONSEEEEEEEEE :',response);
-
             res.status(200).json(response)
         } catch (error) {
             console.log('the error has to show on the rejected docs side :', error);
             res.status(500).json({ message: 'internal server error' })
+        }
+    }
+
+    addNewSubScriptionPlan = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id, name, price, period, description, features, popular } = req.body;
+            const operation = 'Add-New-Subscription';
+            const response: Message = (await restaurantRabbitMqClient.produce(
+                { id, name, price, period, description, features, popular },
+                operation
+            )) as Message;
+
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in addNewSubScriptionPlan:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    getAllSubscriptionPlans = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Get-All-Subscription-Plan';
+            const response: Message = (await restaurantRabbitMqClient.produce({}, operation)) as Message;
+            // console.log('Response from RabbitMQ:', response);
+
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in getAllSubscriptionPlans:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    editSubscriptionPlans = async (req: Request, res: Response, next: NextFunction) => {
+        // console.log(req.body, '-------', req.params);
+        try {
+            const { id } = req.params
+            const { name, price, period, description, features, popular } = req.body
+            const operation = 'Edit-Subscription-Plan'
+            const response: Message = (await restaurantRabbitMqClient.produce(
+                {
+                    id,
+                    name,
+                    price,
+                    description,
+                    period,
+                    features,
+                    popular
+                }, operation)) as Message
+            res.status(200).json({ paln: response })
+        } catch (error) {
+            console.log('Error in editSubscriptionPlans:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    deleteSubscriptionPlans = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params
+            const operation = 'Delete-SubScription-Plan'
+            const response: Message = (await restaurantRabbitMqClient.produce({ id }, operation)) as Message
+            res.status(200).json(response)
+
+        } catch (error) {
+            console.log('Error in deleteSubscriptionPlans:', error);
+            res.status(500).json({ message: 'Internal server error' });
         }
     }
 }

@@ -3,11 +3,14 @@ import multer from "multer";
 import restaurantAuthController from "./controller/authController";
 import menuController from "./controller/menuController";
 import upload from "../../middleware/multer";
+import subscriptionPlanController from "./controller/subscriptionPlanController";
 
 const publicRestaurantRoute = express.Router()
 const uploadCloud = multer();
 const AuthController = new restaurantAuthController()
 const MenuController = new menuController()
+const SubscriptionPlanController=new subscriptionPlanController()
+
 
 publicRestaurantRoute.post('/restaurant-checking', AuthController.checkRegistration)
 publicRestaurantRoute.post('/restaurant-register', AuthController.registration)
@@ -42,6 +45,9 @@ publicRestaurantRoute.get('/restaurant-menus', MenuController.getAllDatas)
 
 // protectedRestaurantRoute.get('/get-all-menus',MenuController.getAllDishes)
 protectedRestaurantRoute.post('/sort-menu',MenuController.sortMenus)
+protectedRestaurantRoute.get('/get-all-plans',SubscriptionPlanController.getAllSubscriptionPlandetails)
+
+
 
 
 export  {publicRestaurantRoute,protectedRestaurantRoute}
