@@ -86,7 +86,6 @@ export default class restaurantController {
             const operation = 'Get-All-Subscription-Plan';
             const response: Message = (await restaurantRabbitMqClient.produce({}, operation)) as Message;
             // console.log('Response from RabbitMQ:', response);
-
             res.status(200).json(response);
         } catch (error) {
             console.log('Error in getAllSubscriptionPlans:', error);
@@ -126,6 +125,17 @@ export default class restaurantController {
 
         } catch (error) {
             console.log('Error in deleteSubscriptionPlans:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    getAllPaymentsOnRestaurants = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Get-All-Restaurant-Payments'
+            const response: Message = (await restaurantRabbitMqClient.produce({}, operation)) as Message
+            res.status(200).json(response)
+        } catch (error) {
+            console.log('Error in get all payemnts on restaurant:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     }

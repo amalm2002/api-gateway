@@ -93,7 +93,7 @@ export default class restaurantAuthController {
                 { token, restaurant_id, isOnline },
                 operation
             )) as Message
-            console.log('response on the online-update-status :', response)
+            // console.log('response on the online-update-status :', response)
             res.status(200).json(response)
 
         } catch (error) {
@@ -112,7 +112,7 @@ export default class restaurantAuthController {
                 restaurantId,
                 operation
             )) as Message
-            console.log('response on the fetch-Online-status :', response)
+            // console.log('response on the fetch-Online-status :', response)
             res.status(200).json(response)
             
         } catch (error) {

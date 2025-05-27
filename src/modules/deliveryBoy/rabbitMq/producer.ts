@@ -1,3 +1,4 @@
+
 import { Channel } from 'amqplib';
 import rabbitmqConfig from '../../../config/rabbitmq.config';
 import { randomUUID } from 'crypto';
@@ -12,12 +13,12 @@ export default class Producer {
 
     async produceMessage(data: any, operation: any) {
         try {
-            console.log(this.replyQueueName, 'replyQueueName for restaurant...');
+            console.log(this.replyQueueName, 'replyQueueName for deliveryBoy...');
 
             const uuid = randomUUID();
 
             this.channel.sendToQueue(
-                rabbitmqConfig.queues.restaurantQueue,
+                rabbitmqConfig.queues.deliveryBoyQueue,
                 Buffer.from(JSON.stringify(data)),
                 {
                     replyTo: this.replyQueueName,

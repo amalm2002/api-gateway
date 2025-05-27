@@ -101,6 +101,8 @@ export default class menuController {
     getSpecificMenu = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const restaurantId = req.params.id
+            console.log('restaurantId',restaurantId);
+            
             const operation = 'Get-Specific-Menu'
             const response = (await restaurantRabbitMqClient.produce(restaurantId, operation)) as Message
             res.status(200).json(response)
@@ -209,7 +211,7 @@ export default class menuController {
     //     }
     // }
 
-    
+
     sortMenus = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('sortMenus body:', req.body);

@@ -6,11 +6,11 @@ import logger from "morgan";
 import http from 'http';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
-
 import {publicRoute,protectedRoute} from "./modules/user/route";
 import {publicRestaurantRoute,protectedRestaurantRoute} from "./modules/restaurant/route"
 import authRoute from "./modules/auth/route"
 import adminRoute from "./modules/admin/route";
+import deliveryBoyRoute from "./modules/deliveryBoy/route";
 import { isValidated } from "./modules/auth/controller";
 
 class App {
@@ -42,14 +42,17 @@ class App {
     //public route   
     this.app.use("/api/user",publicRoute);
     this.app.use("/api/restaurant", publicRestaurantRoute);
-    this.app.use('/api/admin',adminRoute)
+    // this.app.use('/api/admin',adminRoute)
+    this.app.use('/api/deliveryBoy',deliveryBoyRoute)
+    
     //protected route 
     this.app.use('/api/auth',authRoute)
     this.app.use("/api/user",isValidated('User'),protectedRoute);
     this.app.use("/api/restaurant",isValidated('Restaurant'), protectedRestaurantRoute);
     this.app.use('/api/admin',isValidated('Admin'),adminRoute)
+    this.app.use('/api/deliveryBoy',isValidated('DeliveryBoy'),deliveryBoyRoute)
   }
-
+  
   public startServer(port: number): void {
     this.server.listen(port, () => {
       console.log(`API-Gateway started on ${port}`);

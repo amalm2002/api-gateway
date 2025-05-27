@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { UserService } from './config/user.client'
 import { AuthResponse } from '../../interfaces/interface';
-import { log } from '@grpc/grpc-js/build/src/logging';
+
 
 
 
@@ -101,6 +101,8 @@ export default class userController {
     try {
       UserService.CheckUserLogin(req.body, (err: any, result: AuthResponse) => {
         if (err) {
+          // console.log(err,'errrrrrrrrrrrrr ');
+
           res.status(400).json({ message: err })
         } else {
           console.log('result of login user :', result);

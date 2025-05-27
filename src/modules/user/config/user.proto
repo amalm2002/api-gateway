@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package user_package;
 
-
 service UserService {
   rpc CreateUser (CreateUserRequest) returns (UserResponse);
   rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
@@ -10,16 +9,20 @@ service UserService {
   rpc GetUserById (UserIdRequest) returns (UserResponse);
   rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
   rpc UpdateUserAddress (UpdateUserAddressRequest) returns (AddressResponse);
-  rpc DeleteUserAddress(DeleteAddressRequest) returns (DeleteAddressResponse);
+  rpc DeleteUserAddress (DeleteAddressRequest) returns (DeleteAddressResponse);
   rpc DeleteUser (UserIdRequest) returns (DeleteUserResponse);
   rpc ResendOtp (ResendOtpRequest) returns (ResendOtpResponse);
   rpc CheckGoogleSignIn (CheckGoogleSignInRequest) returns (CheckGoogleSignInResponse);
   rpc GetAllUsers (EmptyRequest) returns (GetAllUsersResponse);
-  rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
-  rpc ForgotPasswordUser(ForgotPasswordUserRequest) returns (ForgotPasswordUserResponse);
-  rpc VerifyOtp(VerifyOtpRequest) returns (VerifyOtpResponse);
-  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
- }
+  rpc BlockUser (BlockUserRequest) returns (BlockUserResponse);
+  rpc ForgotPasswordUser (ForgotPasswordUserRequest) returns (ForgotPasswordUserResponse);
+  rpc VerifyOtp (VerifyOtpRequest) returns (VerifyOtpResponse);
+  rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+  rpc AddToCart (AddToCartRequest) returns (AddToCartResponse);
+  rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsResponse);
+  rpc UpdateCartItemQuantity (UpdateCartItemQuantityRequest) returns (UpdateCartItemQuantityResponse);
+  rpc RemoveCartItem (RemoveCartItemRequest) returns (RemoveCartItemResponse);
+}
 
 message ResendOtpRequest {  
   string email = 1;
@@ -28,7 +31,7 @@ message ResendOtpRequest {
 
 message ResendOtpResponse { 
   string message = 1;
-  string token = 2;
+  string token = 2;
 }
 
 message CheckUserLoginRequest {
@@ -49,8 +52,6 @@ message CheckUserLoginResponse {
 
 message ForgotPasswordUserRequest {
   string email = 1;
-  string otp = 2;
-  string token = 3;
 }
 
 message ForgotPasswordUserResponse {
@@ -108,6 +109,7 @@ message User {
   string createdAt = 10;
   string updatedAt = 11;
   Wallet wallet = 12;
+  string phone = 13;
 }
 
 message UpdateUserAddressRequest {
@@ -147,7 +149,7 @@ message Transaction {
   int32 amount = 1;
   string date = 2;
   string details = 3;
-  string paymentMethod = 4; // Possible values: 'UPI | Wallet | COD'
+  string paymentMethod = 4;
 }
 
 message CreateUserRequest {
@@ -203,13 +205,13 @@ message DeleteUserResponse {
 }
 
 message CheckUserRequest {
-    string email = 1;
+  string email = 1;
+  string name = 2;
 }
 
 message CheckUserResponse {
-    string message = 1;
-    string token = 2;
-
+  string message = 1;
+  string token = 2;
 }
 
 message EmptyRequest {}
@@ -225,4 +227,67 @@ message BlockUserRequest {
 message BlockUserResponse {
   bool success = 1;
   string message = 2;
+  bool isActive = 3;
+}
+
+
+
+message AddToCartRequest {
+  string user_id = 1;
+  CartItem item = 2;
+}
+
+message AddToCartResponse {
+  string message = 1;
+  bool success = 2;
+  Cart cart = 3;
+}
+
+message CartItem {
+  string menuId = 1;
+  int32 quantity = 2;
+  double price = 3;
+  string name = 4;
+  string category = 5;
+  string restaurantName = 6;
+  double discount = 7;
+}
+
+message Cart {
+  string user_id = 1;
+  repeated CartItem items = 2;
+  double total_amount = 3;
+  string created_at = 4;
+  string updated_at = 5;
+}
+
+message GetCartItemsRequest {
+  string user_id = 1;
+}
+
+message GetCartItemsResponse {
+  repeated CartItem items = 1;
+}
+
+message UpdateCartItemQuantityRequest {
+  string user_id= 1;
+  string menuId = 2;
+  int32 quantity = 3;
+}
+
+message UpdateCartItemQuantityResponse {
+  string message = 1;
+  bool success = 2;
+  Cart cart = 3;
+}
+
+message RemoveCartItemRequest {
+  string user_id = 1;
+  string menuId = 2;
+}
+
+message RemoveCartItemResponse {
+  string message = 1;
+  bool success = 2;
+  Cart cart = 3;
 }
