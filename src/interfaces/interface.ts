@@ -1,6 +1,13 @@
-export interface Message {
-  message: string
+import { Socket } from "socket.io";
 
+export interface Message {
+  message: string;
+  success?: boolean;
+  refundRequired?: boolean;
+  refundData?: any;
+  data?:any;
+  response?:any
+  status?:string;
 }
 
 export interface AuthResponse {
@@ -11,21 +18,21 @@ export interface AuthResponse {
   refreshToken: string;
   token: string;
   _id: string;
-  isActive:boolean;
-  role:string;
+  isActive: boolean;
+  role: string;
 }
 
 
 export interface UserCredentials {
   userId: string;
   isAdmin: boolean;
-  role:string;
-  message:string;
+  role: string;
+  message: string;
 }
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
-  message:string;
+  message: string;
 }
 
 export interface UserInterface extends Document {
@@ -43,4 +50,18 @@ export interface UserInterface extends Document {
     }[];
   };
 
+}
+
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface DecodedToken {
+  clientId: string;
+  role: string;
+}
+
+export interface AuthenticatedSocket extends Socket {
+  decoded?: DecodedToken
 }

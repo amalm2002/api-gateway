@@ -6,6 +6,7 @@ import uploadToS3, { deleteFromS3 } from '../../../services/s3bucket'
 
 
 export default class menuController {
+
     addMenuItems = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             console.log('Request body:', req.body);
@@ -48,11 +49,6 @@ export default class menuController {
 
             res.status(201).json(response);
         } catch (error) {
-            // console.log('error on addMenuItem side :', error);
-            // res
-            //     .status(500)
-            //     .json({ message: "Internal Server Error" });
-
             console.log('error on addMenuItem side :', error);
             const errorMessage = (error as Error).message;
 
@@ -84,7 +80,9 @@ export default class menuController {
 
     getAllMenus = async (req: Request, res: Response, next: NextFunction) => {
         try {
+
             const restaurantId = req.params.id
+            // console.log('rrrrrrrrrrrr', restaurantId);
             const operation = 'Get-All-Menus';
             const response = (await restaurantRabbitMqClient.produce(restaurantId, operation)) as Message
             // console.log('get all menu response :', response);
@@ -101,8 +99,8 @@ export default class menuController {
     getSpecificMenu = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const restaurantId = req.params.id
-            console.log('restaurantId',restaurantId);
-            
+            console.log('restaurantId', restaurantId);
+
             const operation = 'Get-Specific-Menu'
             const response = (await restaurantRabbitMqClient.produce(restaurantId, operation)) as Message
             res.status(200).json(response)
@@ -200,21 +198,9 @@ export default class menuController {
         }
     }
 
-    // getAllDishes = async (req: Request, res: Response, next: NextFunction) => {
-    //     try {
-    //         const operation = 'Get-All-Restaurant-Dishes'
-    //         const response = (await restaurantRabbitMqClient.produce({}, operation)) as Message
-    //         res.status(200).json(response)
-    //     } catch (error) {
-    //         console.log('error on get all details side :', error);
-    //         res.status(500).json({ message: "Internal Server Error" });
-    //     }
-    // }
-
-
     sortMenus = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('sortMenus body:', req.body);
+            // console.log('sortMenus body:', req.body);
             const { tempSortOption, searchTerm, category } = req.body;
             const operation = 'Sort-Menu-Items';
             const response = (await restaurantRabbitMqClient.produce(
@@ -223,11 +209,41 @@ export default class menuController {
             )) as Message;
             // if (response.error) {
             //     return res.status(400).json({ message: response.error });
-            // }
+            // }            
             res.status(200).json(response);
         } catch (error) {
             console.log('Error in sortMenus controller:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
+
+    updateMenuQuantityMenuItems = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            console.log('update-menu-quantity body data :', req.body);
+            const operation = 'Update-Menu-Quantity'
+            const response: Message = (await restaurantRabbitMqClient.produce({ ...req.body }, operation)) as Message
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in updateMenuQuantityMenuItems controller:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+
+    cancelOrderMenuQuantityUpdate = async (refundData: {
+        userId: string;
+        restaurantId: string;
+        items: Array<{ menuId: string; quantity: number }>
+    }) => {
+        try {
+            const operation = 'Update-Menu-Quantity-Cancel-Order';
+
+            const result = await restaurantRabbitMqClient.produce(refundData, operation);
+
+            console.log('Menu quantity updated in restaurant service:', result);
+            return result;
+        } catch (error) {
+            console.error('Error updating menu quantity:', error);
+            return { success: false, message: 'Failed to update menu quantity' };
+        }
+    }
 }

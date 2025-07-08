@@ -20,7 +20,7 @@ export default class AdminController {
 
     blockUsers = (req: Request, res: Response) => {
         try {
-            UserService.BlockUser({ userId: req.params.id }, (err: any, result: { success: boolean; message: string, isActive: boolean }) => {
+            UserService.BlockUser({ userId: req.params.id }, (err: any, result: { success: boolean; message: string, isActive: boolean,userId:string }) => {
 
                 if (err) {
                     res.status(400).json({ message: err })

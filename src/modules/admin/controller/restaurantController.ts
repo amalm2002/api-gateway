@@ -73,7 +73,6 @@ export default class restaurantController {
                 { id, name, price, period, description, features, popular },
                 operation
             )) as Message;
-
             res.status(200).json(response);
         } catch (error) {
             console.log('Error in addNewSubScriptionPlan:', error);
@@ -109,7 +108,7 @@ export default class restaurantController {
                     features,
                     popular
                 }, operation)) as Message
-            res.status(200).json({ paln: response })
+            res.status(200).json({ plan: response });
         } catch (error) {
             console.log('Error in editSubscriptionPlans:', error);
             res.status(500).json({ message: 'Internal server error' });

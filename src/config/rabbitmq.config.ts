@@ -6,6 +6,7 @@ export default {
     },
     queues: {
         restaurantQueue: 'restaurant_queue',
-        deliveryBoyQueue: 'deliveryBoy_queue'
+        deliveryBoyQueue: 'deliveryBoy_queue',
+        orderServiceQueue: 'order_service_queue'
     }
 }

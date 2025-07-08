@@ -22,6 +22,8 @@ service UserService {
   rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsResponse);
   rpc UpdateCartItemQuantity (UpdateCartItemQuantityRequest) returns (UpdateCartItemQuantityResponse);
   rpc RemoveCartItem (RemoveCartItemRequest) returns (RemoveCartItemResponse);
+  rpc DeleteUserCart (DeleteUserCartRequest) returns (DeleteUserCartResponse);
+  rpc UpdateWallet (UpdateWalletRequest) returns (UpdateWalletResponse);
 }
 
 message ResendOtpRequest {  
@@ -228,6 +230,7 @@ message BlockUserResponse {
   bool success = 1;
   string message = 2;
   bool isActive = 3;
+  string userId = 4;
 }
 
 
@@ -251,6 +254,19 @@ message CartItem {
   string category = 5;
   string restaurantName = 6;
   double discount = 7;
+  string restaurantId = 8;
+  string description = 9; 
+  string timing = 10; 
+  double rating = 11; 
+  bool hasVariants = 12; 
+  repeated string images = 13; 
+  repeated Variant variants = 14; 
+}
+
+message Variant {
+    string name = 1;
+    double price = 2;
+    int32 quantity = 3;
 }
 
 message Cart {
@@ -290,4 +306,27 @@ message RemoveCartItemResponse {
   string message = 1;
   bool success = 2;
   Cart cart = 3;
+}
+
+
+message DeleteUserCartRequest {
+  string user_id = 1;
+}
+
+message DeleteUserCartResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+message UpdateWalletRequest {
+  string userId = 1;
+  int32 amount = 2;
+  string description = 3;
+  string type = 4; 
+}
+
+message UpdateWalletResponse {
+  bool success = 1;
+  string message = 2;
+  Wallet wallet = 3;
 }

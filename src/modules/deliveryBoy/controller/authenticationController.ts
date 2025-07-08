@@ -8,7 +8,7 @@ export default class authenticationController {
 
     rigister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            console.log('request data :', req.body);
+            // console.log('request data :', req.body);
             const { mobile } = req.body
             const operation = 'Delivery-Boy-Register'
             const response: Message = (await deliveryBoyRabbitMqClient.produce(
@@ -28,7 +28,7 @@ export default class authenticationController {
 
     deliveryBoyLocation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            console.log('data is getting on the api-gateway :', req.body);
+            // console.log('data is getting on the api-gateway :', req.body);
 
             const operation = 'Delivery-Boy-location'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({

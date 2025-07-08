@@ -59,6 +59,8 @@ export default class deliveryBoyController {
         try {
             const operation = 'Fetch-All-Delivery-Boys'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message
+            console.log('repsone :', response);
+
             res.status(200).json(response)
         } catch (error) {
             console.log(error);

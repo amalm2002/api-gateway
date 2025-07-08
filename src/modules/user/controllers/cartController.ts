@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express'
-import { UserService } from './config/user.client'
+import { UserService } from '../config/user.client';
 
 export default class CartController {
     GetCartItems = async (req: Request, res: Response) => {
@@ -27,6 +27,8 @@ export default class CartController {
     AddToCart = async (req: Request, res: Response) => {
         try {
             const userId = req.params.id
+            // console.log('req bodyyyyyy :', req.body);
+
             UserService.AddToCart({
                 item: {
                     menuId: req.body.food_id,
@@ -34,8 +36,15 @@ export default class CartController {
                     price: req.body.price,
                     name: req.body.name,
                     category: req.body.category,
+                    restaurantId: req.body.restaurant_id,
                     restaurantName: req.body.restaurant_name,
-                    discount: req.body.discount
+                    discount: req.body.discount,
+                    description: req.body.description, 
+                    timing: req.body.timing, 
+                    rating: req.body.rating, 
+                    hasVariants: req.body.hasVariants, 
+                    images: req.body.images, 
+                    variants: req.body.variants || [],
                 },
                 userId
             },
@@ -95,4 +104,24 @@ export default class CartController {
 
         }
     }
+
+    DeleteUserCart = async (req: Request, res: Response) => {
+        try {
+            const userId = req.params.id
+            UserService.DeleteUserCart({ userId }, (err: any, result: any) => {
+                if (err) {
+                    console.log('deleteUser err :', err);
+                    res.status(400).json({ message: err.message });
+                } else {
+                    console.log('result :', result);
+
+                    res.status(200).json({ message: result.message, success: result.success });
+                }
+            })
+        } catch (error) {
+            console.log('DeleteUserCart side:', error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
+
 }

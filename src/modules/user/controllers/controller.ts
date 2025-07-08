@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { UserService } from './config/user.client'
-import { AuthResponse } from '../../interfaces/interface';
+import { UserService } from '../config/user.client'
+import { AuthResponse } from '../../../interfaces/interface'
 
 
 
@@ -105,7 +105,7 @@ export default class userController {
 
           res.status(400).json({ message: err })
         } else {
-          console.log('result of login user :', result);
+          // console.log('result of login user :', result);
           res.status(200).json({
             user: result.name,
             userId: result._id,
@@ -225,8 +225,6 @@ export default class userController {
         if (err) {
           res.status(400).json({ message: err.message });
         } else {
-          console.log(result);
-
           res.status(200).json({ message: result.message, response: result });
         }
       });
@@ -289,9 +287,9 @@ export default class userController {
       const { id, index } = req.params
       const addressIndex = parseInt(index)
 
-      console.log('Params:', req.params);
+      // console.log('Params:', req.params);
 
-      console.log(addressIndex, id);
+      // console.log(addressIndex, id);
 
 
       UserService.DeleteUserAddress(

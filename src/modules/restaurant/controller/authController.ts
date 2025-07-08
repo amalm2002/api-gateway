@@ -1,11 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
 import restaurantRabbitMqClient from '../rabbitmq/client'
 import { AuthResponse, Message } from '../../../interfaces/interface'
+import DeliveryPartnerController from '../../deliveryBoy/controller/deliveryPartnerController'
 
 export default class restaurantAuthController {
 
+    private deliveryTrackingController: DeliveryPartnerController
+
+    constructor() {
+        this.deliveryTrackingController = new DeliveryPartnerController();
+    }
+
     checkRegistration = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {           
+        try {
             const { email, mobile } = req.body
             const operation = 'Registration-check'
             const response: Message = (await restaurantRabbitMqClient.produce(
@@ -104,17 +111,17 @@ export default class restaurantAuthController {
         }
     }
 
-    fetchOnlineStatus=async (req:Request,res:Response,next:NextFunction):Promise <void> => {
+    fetchOnlineStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const restaurantId=req.params.id
-            const operation='Fetch-Online-Status'
+            const restaurantId = req.params.id
+            const operation = 'Fetch-Online-Status'
             const response: Message = (await restaurantRabbitMqClient.produce(
                 restaurantId,
                 operation
             )) as Message
             // console.log('response on the fetch-Online-status :', response)
             res.status(200).json(response)
-            
+
         } catch (error) {
             console.log('error on fetch-online-status restaurant', error);
             res
@@ -185,7 +192,7 @@ export default class restaurantAuthController {
             }, operation)) as Message
 
             // console.log('RESPONSEEEEEEEEEEE',response)
-            res.status(200).json(response)  
+            res.status(200).json(response)
 
         } catch (error) {
             console.log('error on document re-submission side restaurant', error);
@@ -194,4 +201,35 @@ export default class restaurantAuthController {
                 .json({ message: "Internal Server Error" });
         }
     }
+
+    getRestaurantById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const restaurantId = req.params.id;
+            const operation = 'Get-Restaurant-By-Id';
+            const response: Message = (await restaurantRabbitMqClient.produce(
+                { restaurantId },
+                operation
+            )) as Message;
+            // console.log('response before the if :', response);
+
+            if (response.success && response.data) {
+                // console.log('response after the if :', response);
+                const deliveryBoyResponse = await this.deliveryTrackingController.findNearestDeliveryPartner(response.data);
+                console.log('delivery boy response :',deliveryBoyResponse);
+                
+                res.status(200).json({
+                    success: true,
+                    restaurant: response.data,
+                    deliveryBoys: deliveryBoyResponse.success ? deliveryBoyResponse.data : [],
+                });
+                return
+            } else {
+                res.status(404).json({ success: false, message: 'Restaurant not found' });
+                return
+            }
+        } catch (error) {
+            console.error('Error on get restaurant by id:', error);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
+    };
 }
