@@ -6,14 +6,11 @@ export default class CartController {
     GetCartItems = async (req: Request, res: Response) => {
         try {
             const userId = req.params.id
-            // console.log('ussssss :',userId);
-
             UserService.GetCartItems({ userId }, (err: any, result: any) => {
                 if (err) {
                     console.log('get cart side err :', err);
                     res.status(400).json({ message: err.message });
                 } else {
-                    // console.log('result :', result);
                     res.status(200).json({ message: result.message, response: result });
                 }
             })
@@ -27,8 +24,6 @@ export default class CartController {
     AddToCart = async (req: Request, res: Response) => {
         try {
             const userId = req.params.id
-            // console.log('req bodyyyyyy :', req.body);
-
             UserService.AddToCart({
                 item: {
                     menuId: req.body.food_id,
@@ -39,11 +34,11 @@ export default class CartController {
                     restaurantId: req.body.restaurant_id,
                     restaurantName: req.body.restaurant_name,
                     discount: req.body.discount,
-                    description: req.body.description, 
-                    timing: req.body.timing, 
-                    rating: req.body.rating, 
-                    hasVariants: req.body.hasVariants, 
-                    images: req.body.images, 
+                    description: req.body.description,
+                    timing: req.body.timing,
+                    rating: req.body.rating,
+                    hasVariants: req.body.hasVariants,
+                    images: req.body.images,
                     variants: req.body.variants || [],
                 },
                 userId
@@ -65,7 +60,6 @@ export default class CartController {
 
     UpdateCartItemQuantity = async (req: Request, res: Response) => {
         try {
-            // console.log('bodyyyyyyy :', req.body, 'params :', req.params.id);
             const userId = req.params.id
             const { menuId, quantity } = req.body
             UserService.UpdateCartItemQuantity({ userId, menuId, quantity },

@@ -32,8 +32,6 @@ export default class OrderController {
 
     createOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // console.log('create order data :',req.body);
-
             const operation = 'Create-Order';
             const response: Message = (await orderServiceRabbitMqClient.produce({
                 ...req.body,
@@ -60,7 +58,6 @@ export default class OrderController {
 
     placeOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // console.log('place order data :', req.body);
             const operation = 'Place-Order';
             const response: Message = (await orderServiceRabbitMqClient.produce({
                 orderData: req.body,
@@ -75,7 +72,6 @@ export default class OrderController {
     changeOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const orderId = req.params.id
-            console.log('======= :', orderId, '======= :', req.body);
             const operation = 'Change-Order-Status'
             const response: Message = (await orderServiceRabbitMqClient.produce({
                 orderId, ...req.body
@@ -104,7 +100,6 @@ export default class OrderController {
 
     getOrderDetails = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // console.log('================== ivide ethyy tto :',req.params.id);    
             const orderId = req.params.id
             const operation = 'Get-Order-Details'
             const response: Message = (await orderServiceRabbitMqClient.produce({
@@ -120,15 +115,11 @@ export default class OrderController {
     cancelOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const orderId = req.params.orderId;
-            // console.log('order id :', orderId);
-
             const operation = 'Cancel-Order';
             const response: Message = (await orderServiceRabbitMqClient.produce(
                 { orderId },
                 operation
             )) as Message;
-            // console.log('response from the cancel order :', response);
-
             if (response.success) {
                 const updateMenuQtyResponse = await this.menuController.cancelOrderMenuQuantityUpdate({
                     userId: response.refundData.userId,

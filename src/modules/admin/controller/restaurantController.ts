@@ -8,12 +8,12 @@ export default class restaurantController {
 
     getAllRestaurants = async (req: Request, res: Response, next: NextFunction) => {
         try {
-
-            const operation = 'Get-All-Restaurants'
-            const response: Message = (await restaurantRabbitMqClient.produce({},
+            const { search, status } = req.query; 
+            const operation = 'Get-All-Restaurants';
+            const payload = { search: search as string, status: status as string };
+            const response: Message = (await restaurantRabbitMqClient.produce(payload,
                 operation)) as Message
             res.status(200).json(response)
-
         } catch (error: any) {
             console.log('error has show on restaurant-controller getAllRestaurants api-gateway side :', error);
             res.status(500).json({ message: 'internal server error' })

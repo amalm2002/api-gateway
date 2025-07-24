@@ -9,11 +9,8 @@ export default class userController {
 
   CreateUser = async (req: Request, res: Response) => {
     try {
-      // console.log('Create user ------ ',req.body);
-
       const token = req.cookies.otp
       const otp = req.body.otp
-
       UserService.CreateUser(
         {
           ...req.body.formData,
@@ -21,8 +18,6 @@ export default class userController {
           token: req.cookies.otp
         },
         (err: any, result: { message: string, isAdmin: boolean }) => {
-          // console.log('createuser side result..........',result);
-
           if (err) {
             res.status(400).json({ message: result.message });
           } else {
@@ -32,9 +27,7 @@ export default class userController {
       );
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({ message: "Internal Server Error" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   };
 
@@ -63,9 +56,6 @@ export default class userController {
   }
 
   ResendOtp = async (req: Request, res: Response) => {
-    // console.log('resend OTP email ,', req.body.email);
-    // console.log('resend OTP formData ,', { ...req.body.formData });
-
     try {
       UserService.ResendOtp(
         {
@@ -97,15 +87,11 @@ export default class userController {
   };
 
   CheckUserLogin = async (req: Request, res: Response) => {
-    // console.log('check user on api-gateway :', req.body);
     try {
       UserService.CheckUserLogin(req.body, (err: any, result: AuthResponse) => {
         if (err) {
-          // console.log(err,'errrrrrrrrrrrrr ');
-
           res.status(400).json({ message: err })
         } else {
-          // console.log('result of login user :', result);
           res.status(200).json({
             user: result.name,
             userId: result._id,
@@ -129,7 +115,6 @@ export default class userController {
   }
 
   CheckGoogleSignInUser = async (req: Request, res: Response) => {
-    console.log('google data gettinon api-gatway :', req.body);
     try {
       UserService.CheckGoogleSignIn(req.body,
         (err: any, result: AuthResponse) => {
@@ -161,7 +146,6 @@ export default class userController {
 
   ForgotPasswordCheck = async (req: Request, res: Response) => {
     try {
-      // console.log('ForgotPasswordCheck request:', req.body);
       UserService.ForgotPasswordUser(req.body, (err: any, result: { message: string; token?: string }) => {
         if (err) {
           console.error('Error in ForgotPasswordCheck:', err);
@@ -188,7 +172,6 @@ export default class userController {
 
   VerifyOtp = async (req: Request, res: Response) => {
     try {
-      // console.log('ivide ethyyyyyyyyyy :', req.body);
       const { email, otp, token } = req.body
       UserService.VerifyOtp({ email, otp, token }, (err: any, result: { message: string }) => {
         if (err) {
@@ -286,12 +269,6 @@ export default class userController {
     try {
       const { id, index } = req.params
       const addressIndex = parseInt(index)
-
-      // console.log('Params:', req.params);
-
-      // console.log(addressIndex, id);
-
-
       UserService.DeleteUserAddress(
         { id: req.params.id, index: addressIndex },
         (err: any, result: any) => {

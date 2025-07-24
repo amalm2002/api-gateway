@@ -45,9 +45,6 @@ protectedRestaurantRoute.put('/edit-menu-item/:id', upload.fields([
 ]), MenuController.editMenuItems)
 
 protectedRestaurantRoute.patch('/menu/:id', MenuController.softDeleteMenu)
-// protectedRestaurantRoute.post('/update-menu-quantities', MenuController.updateMenuQuantityMenuItems)
-
-// protectedRestaurantRoute.get('/get-all-menus',MenuController.getAllDishes)
 protectedRestaurantRoute.get('/get-all-plans', SubscriptionPlanController.getAllSubscriptionPlandetails)
 protectedRestaurantRoute.get('/check-plan-exist/:id', SubscriptionPlanController.getAnySubscriptionPlanExist)
 protectedRestaurantRoute.post('/restaurnt/subscription-plan', SubscriptionPlanController.paymentForSubscriptionPlan)

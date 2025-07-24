@@ -1,28 +1,37 @@
-const morgan = require("morgan");
-const winston = require("winston");
-require("winston-daily-rotate-file");
+import winston from "winston";
+import morgan from "morgan";
+import { ElasticsearchTransport } from "winston-elasticsearch";
+import { Client } from "@elastic/elasticsearch";
 
-// Create Winston logger
+const esClient = new Client({
+  node: "http://elasticsearch:9200", 
+});
+
+const esTransport = new ElasticsearchTransport({
+  level: "info",
+  client: esClient as any,
+  indexPrefix: "api-gateway-logs",
+  transformer: (logData: any) => ({
+    "@timestamp": new Date().toISOString(),
+    severity: logData.level,
+    message: logData.message,
+    meta: logData.meta || {},
+  }),
+});
+
 const logger = winston.createLogger({
-    level: "info",
-    format: winston.format.json(),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.DailyRotateFile({
-            filename: "logs/%DATE%-requests.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "14d",
-        }),
-    ],
+  level: "info",
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    esTransport,
+  ],
 });
 
-// Morgan middleware to log HTTP requests
 const morganMiddleware = morgan("combined", {
-    stream: {
-        write: (message: string) => logger.info(message.trim()),
-    },
+  stream: {
+    write: (message: string) => logger.info(message.trim()),
+  },
 });
 
-export { morganMiddleware, logger}
+export { logger, morganMiddleware };

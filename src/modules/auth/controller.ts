@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { AuthClient } from "./config/auth.client";
 import AsyncHandler from "express-async-handler";
 import { UserCredentials, Tokens } from "../../interfaces/interface";
+import redisClient from "../../config/redis.config";
+import { verifyToken } from "../../utils/jwt";
 
 
 declare global {
@@ -52,6 +54,52 @@ export const isValidated = (requiredRole: string) =>
             console.log('error on the auth service isValidate function', (error as Error).message);
         }
     })
+
+
+
+// export const isValidated = (requiredRole: string) =>
+//     AsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//         try {
+//             const token = req.headers.authorization?.trim().split(" ")[1] || req.body.token;
+//             console.log('Incoming Auth Header:', req.headers.authorization);
+//             console.log('Extracted Token:', token);
+//             if (!token) {
+//                 console.log("No token provided or bad format");
+//                 res.status(401).json({ success: false, message: 'No token provided' });
+//                 return;
+//             }
+
+//             const decoded = verifyToken(token, process.env.ACCESS_TOKEN || 'Amal');
+//             const userId = decoded.clientId;
+
+//             const isUserBlocked = await redisClient.get(`blocked_user:${userId}`);
+//             if (isUserBlocked === 'true') {
+//                 res.status(403).json({ success: false, message: 'User is blocked.' });
+//                 return;
+//             }
+
+//             const blacklistedToken = await redisClient.get(`blacklist:token:${userId}`);
+//             if (blacklistedToken === token) {
+//                 res.status(403).json({ success: false, message: 'Access token is blacklisted.' });
+//                 return;
+//             }
+
+//             AuthClient.IsAuthenticated({ token, requiredRole }, async (err: any, result: UserCredentials) => {
+//                 if (err) {
+//                     res.status(401).json({ success: false, message: err.message });
+//                     return;
+//                 }
+
+//                 await redisClient.set(`token:user:${token}`, result.userId, { EX: 3600 });
+//                 req.user = { id: result.userId, role: result.role };
+//                 next();
+//             });
+
+//         } catch (error) {
+//             res.status(401).json({ success: false, message: 'Invalid access token' });
+//         }
+//     });
+
 
 export const refreshToken = AsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,0 +1,49 @@
+
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    ports:
+      - "5050:5050"
+    env_file:
+      - .env
+      - .env.docker
+    networks:
+      - backend
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.18
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    env_file:
+      - .env.docker
+    environment:
+       - discovery.type=${DISCOVERY_TYPE}
+       - xpack.security.enabled=${XPACK_SECURITY_ENABLED}
+       - ES_JAVA_OPTS=${ES_JAVA_OPTS}
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - backend
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.18
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
+    networks:
+      - backend
+
+volumes:
+  esdata:
+
+networks:
+  backend:
+    external: true

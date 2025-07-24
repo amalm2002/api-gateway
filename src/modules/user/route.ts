@@ -3,12 +3,14 @@ import userController from "./controllers/controller";
 import MenuController from "../restaurant/controller/menuController";
 import CartController from "./controllers/cartController";
 import OrderController from "../order/controller/orderController";
+import OrderTransactionController from "../payment/controller/orderTransactionController";
 
 
 const controller = new userController();
 const menuController = new MenuController();
 const cartController = new CartController()
-const orderController=new OrderController()
+const orderController = new OrderController()
+const orderTransactionController = new OrderTransactionController()
 
 const publicRoute = express.Router();
 
@@ -36,23 +38,27 @@ protectedRoute.put('/update-address/:id', controller.addNewAddress)
 protectedRoute.delete('/delete-address/:id/:index', controller.deleteUserAddress)
 
 //cart side 
-protectedRoute.get('/menu-item/:id',menuController.getSpecificMenu)
-protectedRoute.post('/update-menu-quantities',menuController.updateMenuQuantityMenuItems)
+protectedRoute.get('/menu-item/:id', menuController.getSpecificMenu)
+protectedRoute.post('/update-menu-quantities', menuController.updateMenuQuantityMenuItems)
 protectedRoute.post('/add-to-cart/:id', cartController.AddToCart)
 protectedRoute.get('/get-cart/:id', cartController.GetCartItems)
-protectedRoute.patch('/update-cart-item/:id',cartController.UpdateCartItemQuantity)
-protectedRoute.delete('/remove-cart-item/:userId/:id',cartController.RemoveCartItem)
-protectedRoute.delete('/delete-user-cart/:id',cartController.DeleteUserCart)
+protectedRoute.patch('/update-cart-item/:id', cartController.UpdateCartItemQuantity)
+protectedRoute.delete('/remove-cart-item/:userId/:id', cartController.RemoveCartItem)
+protectedRoute.delete('/delete-user-cart/:id', cartController.DeleteUserCart)
 
 //check out side 
-protectedRoute.post('/create-order',orderController.createOrder)
-protectedRoute.post('/verify-payment',orderController.verifyPayment)
-protectedRoute.post('/place-order',orderController.placeOrder)
+// protectedRoute.post('/create-order', orderController.createOrder)
+// protectedRoute.post('/verify-payment', orderController.verifyPayment)
+// protectedRoute.post('/place-order', orderController.placeOrder)
+
+protectedRoute.post('/create-order', orderTransactionController.CreateOrderPayment)
+protectedRoute.post('/verify-payment', orderTransactionController.VerifyUpiPayment)
+protectedRoute.post('/place-order', orderTransactionController.PlaceOrderPayment)
 
 //order side
-protectedRoute.get('/get-orders/:id',orderController.getUsersOrders)
-protectedRoute.get('/order-details/:id',orderController.getOrderDetails)
-protectedRoute.patch('/order/cancel/:orderId',orderController.cancelOrder);
+protectedRoute.get('/get-orders/:id', orderController.getUsersOrders)
+protectedRoute.get('/order-details/:id', orderController.getOrderDetails)
+protectedRoute.patch('/order/cancel/:orderId', orderController.cancelOrder);
 
 
 export { publicRoute, protectedRoute }

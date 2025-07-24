@@ -57,8 +57,6 @@ export default class DeliveryPartnerController {
         { location },
         operation
       )) as Message;
-      // console.log('find the nearest :', response);
-
       return response;
     } catch (error) {
       console.error('Error in findNearestDeliveryPartner:', error);
@@ -161,24 +159,18 @@ export default class DeliveryPartnerController {
   }
 
   async updateDeliveryLocation(req: Request, res: Response, next: NextFunction): Promise<void> {
-
     try {
       const { deliveryBoyId, latitude, longitude } = req.body;
-
-
       if (!deliveryBoyId || typeof latitude !== 'number' || typeof longitude !== 'number') {
         res.status(400).json({ success: false, message: 'Invalid request: deliveryBoyId, latitude, and longitude are required' });
         return
       }
-
       const operation = 'Update-Delivery-Boy-Location';
       const response: Message = (await deliveryBoyRabbitMqClient.produce(
         { deliveryBoyId, latitude, longitude },
         operation
       )) as Message;
-
       console.log('Update delivery boy location response:', JSON.stringify(response, null, 2));
-
       res.status(200).json(response);
     } catch (error) {
       console.error('Error in update-delivery-boy-location:', error);
@@ -186,7 +178,7 @@ export default class DeliveryPartnerController {
     }
   }
 
- async completeDelivery(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async completeDelivery(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { orderId, deliveryBoyId } = req.body;
 

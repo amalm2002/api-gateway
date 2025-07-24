@@ -14,6 +14,7 @@ import {deliveryBoyPublicRoute,deliveryBoyProtectedRoute} from "./modules/delive
 import { isValidated } from "./modules/auth/controller";
 import { setupSocketIO } from "./modules/socket/socket";
 import { morganMiddleware } from "./middleware/centerlized-logging";
+import { generalRateLimiter } from "./middleware/rateLimiter";
 
 class App {
   public app: Application;
@@ -39,6 +40,7 @@ class App {
     this.app.use(helmet());
     // this.app.use(logger('dev'));
     this.app.use(cookieParser());
+    this.app.use(generalRateLimiter)
   }
 
   private routes(): void {
