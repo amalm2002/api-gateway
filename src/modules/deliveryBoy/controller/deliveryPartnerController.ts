@@ -225,4 +225,21 @@ export default class DeliveryPartnerController {
       res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   }
+
+  async orderEarnings(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { paymentMethod, deliveryBoyId, finalTotalDistance, orderAmount } = req.body
+      const operation = 'Order-Earnings';
+      const response: Message = (await deliveryBoyRabbitMqClient.produce({
+        paymentMethod,
+        deliveryBoyId,
+        finalTotalDistance,
+        orderAmount
+      }, operation)) as Message;
+      res.status(200).json(response)
+    } catch (error) {
+      console.error('Error in orderEarings:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
 }

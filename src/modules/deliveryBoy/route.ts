@@ -54,6 +54,7 @@ deliveryBoyProtectedRoute.post('/verify-order-number', OrderController.verifyOrd
 deliveryBoyProtectedRoute.get('/get-user/:id', UserController.GetUserById)
 deliveryBoyProtectedRoute.get('/order-details/:id', OrderController.getOrderDetails)
 deliveryBoyProtectedRoute.post('/complete-order', DeliveryPartnerController.completeDelivery)
+deliveryBoyProtectedRoute.post('/complete-and-earn',DeliveryPartnerController.orderEarnings)
 deliveryBoyProtectedRoute.get('/delivery-partner/order/:id', OrderController.getDeliveryPartnerOrders)
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }
