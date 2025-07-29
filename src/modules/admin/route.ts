@@ -38,6 +38,10 @@ adminRoute.patch('/updateDeliveryBoyStatus/:id',deliveryBoyController.updateDeli
 adminRoute.get('/getDeliveryBoy/:id',deliveryBoyController.fetchDeliveryBoyDetails)
 adminRoute.post('/verifyDeliveryBoyDocs/:id',deliveryBoyController.verifyDeliveryBoyDocuments)
 adminRoute.post('/rejectDeliveryBoyDocs',deliveryBoyController.rejectedDeliveryBoyDocuments)
-
+adminRoute.post('/add-ride-payment-rule',deliveryBoyController.addRidePaymentRule)
+adminRoute.get('/fetch-ride-rate-payment',deliveryBoyController.getRideRatePaymentRules)
+adminRoute.put('/update-ride-payment-rule/:id', deliveryBoyController.updateRidePaymentRule);
+adminRoute.put('/block-ride-payment-rule/:id', deliveryBoyController.blockRidePaymentRule);
+adminRoute.put('/unblock-ride-payment-rule/:id', deliveryBoyController.unblockRidePaymentRule)
 
 export default adminRoute

@@ -125,4 +125,70 @@ export default class deliveryBoyController {
             res.status(500).json({ message: 'internal server error' })
         }
     }
+
+    addRidePaymentRule = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Add-Ride-Payment-Rule';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({
+                ...req.body
+            }, operation)) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('the error has to show on the add-ride-payment  side :', error);
+            res.status(500).json({ message: 'internal server error' });
+        }
+    }
+
+    getRideRatePaymentRules = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Get-Ride-Rate-Payment-Rules';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('the error has to show on the get-ride-rate-payment  side :', error);
+            res.status(500).json({ message: 'internal server error' });
+        }
+    }
+
+    async updateRidePaymentRule(req: Request, res: Response, next: NextFunction) {
+        try {
+            const operation = 'Update-Ride-Payment-Rule';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce(
+                { id: req.params.id, ...req.body },
+                operation
+            )) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in updateRidePaymentRule:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    async blockRidePaymentRule(req: Request, res: Response, next: NextFunction) {
+        try {
+            const operation = 'Block-Ride-Payment-Rule';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce(
+                { id: req.params.id, vehicleType: req.body.vehicleType },
+                operation
+            )) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in blockRidePaymentRule:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    async unblockRidePaymentRule(req: Request, res: Response, next: NextFunction) {
+        try {
+            const operation = 'Unblock-Ride-Payment-Rule';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce(
+                { id: req.params.id },
+                operation
+            )) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in unblockRidePaymentRule:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 }

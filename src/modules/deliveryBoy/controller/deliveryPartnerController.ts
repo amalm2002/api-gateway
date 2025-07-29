@@ -114,7 +114,6 @@ export default class DeliveryPartnerController {
         fetchDeliveryBoyOperation
       )) as Message;
 
-      // console.log('delivery boy response :', deliveryBoyResponse);
 
       if (!deliveryBoyResponse.response) {
         res.status(400).json({ success: false, message: 'Delivery boy not found' });
