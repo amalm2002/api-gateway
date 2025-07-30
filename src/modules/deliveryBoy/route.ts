@@ -56,5 +56,6 @@ deliveryBoyProtectedRoute.get('/order-details/:id', OrderController.getOrderDeta
 deliveryBoyProtectedRoute.post('/complete-order', DeliveryPartnerController.completeDelivery)
 deliveryBoyProtectedRoute.post('/complete-and-earn',DeliveryPartnerController.orderEarnings)
 deliveryBoyProtectedRoute.get('/delivery-partner/order/:id', OrderController.getDeliveryPartnerOrders)
+deliveryBoyProtectedRoute.post('/check-inHand-cash-limit',DeliveryPartnerController.checkTheInHandCash)
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }

@@ -3,14 +3,14 @@ import userController from "./controllers/controller";
 import MenuController from "../restaurant/controller/menuController";
 import CartController from "./controllers/cartController";
 import OrderController from "../order/controller/orderController";
-import OrderTransactionController from "../payment/controller/orderTransactionController";
+import PaymentTransactionController from "../payment/controller/paymentTransactionController";
 
 
 const controller = new userController();
 const menuController = new MenuController();
 const cartController = new CartController()
 const orderController = new OrderController()
-const orderTransactionController = new OrderTransactionController()
+const paymentTransactionController = new PaymentTransactionController()
 
 const publicRoute = express.Router();
 
@@ -51,9 +51,9 @@ protectedRoute.delete('/delete-user-cart/:id', cartController.DeleteUserCart)
 // protectedRoute.post('/verify-payment', orderController.verifyPayment)
 // protectedRoute.post('/place-order', orderController.placeOrder)
 
-protectedRoute.post('/create-order', orderTransactionController.CreateOrderPayment)
-protectedRoute.post('/verify-payment', orderTransactionController.VerifyUpiPayment)
-protectedRoute.post('/place-order', orderTransactionController.PlaceOrderPayment)
+protectedRoute.post('/create-order', paymentTransactionController.CreateOrderPayment)
+protectedRoute.post('/verify-payment', paymentTransactionController.VerifyUpiPayment)
+protectedRoute.post('/place-order', paymentTransactionController.PlaceOrderPayment)
 
 //order side
 protectedRoute.get('/get-orders/:id', orderController.getUsersOrders)

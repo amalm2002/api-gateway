@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { PaymentService } from "../config/payment.client";
-import { error } from "console";
 
 
-export default class orderTransactionController {
+export default class paymentTransactionController {
     PlaceOrderPayment = async (req: Request, res: Response) => {
         try {
             PaymentService.PlaceOrder({
@@ -59,7 +58,7 @@ export default class orderTransactionController {
                 razorpay_signature,
                 orderData
             } = req.body;
-            
+
             PaymentService.VerifyUpiPayment({
                 paymentIdDB: paymentDbId,
                 razorpayOrderId: razorpay_order_id,
@@ -111,5 +110,54 @@ export default class orderTransactionController {
             res.status(500).json({ message: "Internal Server Error" });
         }
     };
+
+    CreateDeliveryBoyPayment = async (req: Request, res: Response) => {
+        const { deliveryBoyId, amount } = req.body
+        try {
+            PaymentService.CreateDeliveryBoyPayment({
+                deliveryBoyId, amount
+            }, (err: any, result: { message: string, orderId: string; razorpayKey: string, error: string, }) => {
+                if (err) {
+                    res.status(400).json({ message: result.message });
+                } else {
+                    console.log('create response :', result);
+                    res.status(200).json({
+                        error: result.error,
+                        orderId: result.orderId,
+                        razorpayKey: result.razorpayKey,
+                    });
+                }
+            })
+        } catch (error) {
+
+        }
+    }
+
+    VerifyDeliveryBoyPayment = async (req: Request, res: Response) => {
+        const { deliveryBoyId,
+            razorpay_payment_id,
+            razorpay_order_id,
+            razorpay_signature } = req.body
+
+        try {
+            PaymentService.VerifyDeliveryBoyPayment({
+                razorpayOrderId: razorpay_order_id,
+                razorpayPaymentId: razorpay_payment_id,
+                razorpaySignature: razorpay_signature,
+                deliveryBoyId
+
+            }, (err: any, result: { message: string, orderId: string, success: boolean }) => {
+                if (err) {
+                    res.status(400).json({ message: err.message || "Something went wrong" });
+                } else {
+                    console.log('verify delivery-boy payment response :', result);
+                    res.status(200).json(result);
+                }
+            })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
 
 }

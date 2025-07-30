@@ -242,4 +242,16 @@ export default class DeliveryPartnerController {
       res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   }
+  
+  checkTheInHandCash = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { deliveryBoyId } = req.body;
+      const operation = 'Check-In-Hand-Cash-Limit';
+      const response: Message = (await deliveryBoyRabbitMqClient.produce({ deliveryBoyId }, operation)) as Message;
+      res.status(200).json(response)
+    } catch (error) {
+      console.error('Error in checkInHandCash on delivery partner:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
 }

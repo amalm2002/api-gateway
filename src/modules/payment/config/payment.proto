@@ -6,6 +6,34 @@ service PaymentService {
   rpc CreateOrderPayment(CreateOrderPaymentRequest) returns (OrderPaymentResponse);
   rpc PlaceOrder(PlaceOrderRequest) returns (PlaceOrderResponse);
   rpc VerifyUpiPayment(VerifyUpiPaymentRequest) returns (VerifyUpiPaymentResponse);
+  rpc CreateDeliveryBoyPayment(CreateDeliveryBoyPaymentRequest) returns (CreateDeliveryBoyPaymentResponse);
+  rpc VerifyDeliveryBoyPayment(VerifyDeliveryBoyPaymentRequest) returns (VerifyDeliveryBoyPaymentResponse);
+
+}
+
+message CreateDeliveryBoyPaymentRequest {
+  double amount = 1;
+  string deliveryBoyId = 2;
+}
+
+message CreateDeliveryBoyPaymentResponse {
+  string orderId = 1;
+  string razorpayKey = 2;
+  string error = 3;
+}
+
+message VerifyDeliveryBoyPaymentRequest {
+  string razorpayOrderId = 1;
+  string razorpayPaymentId = 2;
+  string razorpaySignature = 3;
+  string deliveryBoyId = 4;
+}
+
+message VerifyDeliveryBoyPaymentResponse {
+  string deliveryBoyId = 1;
+  string paymentId = 2;
+  bool success = 3;
+  string message = 4;
 }
 
 message CreateOrderPaymentRequest {
@@ -76,7 +104,6 @@ message Location {
   double latitude = 1;
   double longitude = 2;
 }
-
 
 message PlaceOrderResponse {
   string orderId = 1;
