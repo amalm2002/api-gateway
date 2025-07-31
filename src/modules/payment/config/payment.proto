@@ -8,6 +8,7 @@ service PaymentService {
   rpc VerifyUpiPayment(VerifyUpiPaymentRequest) returns (VerifyUpiPaymentResponse);
   rpc CreateDeliveryBoyPayment(CreateDeliveryBoyPaymentRequest) returns (CreateDeliveryBoyPaymentResponse);
   rpc VerifyDeliveryBoyPayment(VerifyDeliveryBoyPaymentRequest) returns (VerifyDeliveryBoyPaymentResponse);
+  rpc CancelDeliveryBoyPayment(CancelDeliveryBoyPaymentRequest) returns (CancelDeliveryBoyPaymentResponse);
 
 }
 
@@ -34,6 +35,16 @@ message VerifyDeliveryBoyPaymentResponse {
   string paymentId = 2;
   bool success = 3;
   string message = 4;
+}
+
+message CancelDeliveryBoyPaymentRequest {
+  string deliveryBoyId = 1;
+  string orderId = 2 ;
+}
+
+message CancelDeliveryBoyPaymentResponse {
+  bool success = 1;
+  string message = 2;
 }
 
 message CreateOrderPaymentRequest {

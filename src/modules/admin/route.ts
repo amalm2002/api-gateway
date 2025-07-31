@@ -46,5 +46,6 @@ adminRoute.put('/block-ride-payment-rule/:id', deliveryBoyController.blockRidePa
 adminRoute.put('/unblock-ride-payment-rule/:id', deliveryBoyController.unblockRidePaymentRule)
 adminRoute.post('/create-delivery-partner-order', paymentTransactionController.CreateDeliveryBoyPayment)
 adminRoute.post('/verify-payment-delivery-partner', paymentTransactionController.VerifyDeliveryBoyPayment)
+adminRoute.post('/cancel-delivery-partner-payment', paymentTransactionController.CancelDeliveryBoyPayment);
 
 export default adminRoute

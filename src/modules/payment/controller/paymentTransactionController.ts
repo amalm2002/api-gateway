@@ -160,4 +160,20 @@ export default class paymentTransactionController {
         }
     }
 
+    CancelDeliveryBoyPayment = async (req: Request, res: Response) => {
+        const { deliveryBoyId, orderId } = req.body;
+        try {
+            PaymentService.CancelDeliveryBoyPayment({ deliveryBoyId, orderId }, (err: any, result: { message: string; success: boolean }) => {
+                if (err) {
+                    res.status(400).json({ message: err.message || 'Failed to cancel payment' });
+                } else {
+                    res.status(200).json(result);
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    };
+
 }
