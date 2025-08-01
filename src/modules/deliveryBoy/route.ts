@@ -5,9 +5,11 @@ import upload from "../../middleware/multer";
 import deliveryPartnerController from "./controller/deliveryPartnerController";
 import orderController from "../order/controller/orderController";
 import userController from "../user/controllers/controller";
+import paymentTransactionController from "../payment/controller/paymentTransactionController";
 
 const AuthenticationController = new authenticationController()
 const DeliveryPartnerController = new deliveryPartnerController()
+const PaymentTransactionController = new paymentTransactionController()
 const OrderController = new orderController()
 const UserController = new userController()
 
@@ -54,8 +56,14 @@ deliveryBoyProtectedRoute.post('/verify-order-number', OrderController.verifyOrd
 deliveryBoyProtectedRoute.get('/get-user/:id', UserController.GetUserById)
 deliveryBoyProtectedRoute.get('/order-details/:id', OrderController.getOrderDetails)
 deliveryBoyProtectedRoute.post('/complete-order', DeliveryPartnerController.completeDelivery)
-deliveryBoyProtectedRoute.post('/complete-and-earn',DeliveryPartnerController.orderEarnings)
+deliveryBoyProtectedRoute.post('/complete-and-earn', DeliveryPartnerController.orderEarnings)
 deliveryBoyProtectedRoute.get('/delivery-partner/order/:id', OrderController.getDeliveryPartnerOrders)
-deliveryBoyProtectedRoute.post('/check-inHand-cash-limit',DeliveryPartnerController.checkTheInHandCash)
+deliveryBoyProtectedRoute.post('/check-inHand-cash-limit', DeliveryPartnerController.checkTheInHandCash)
+
+//In-Hand-Cash payment routes
+
+deliveryBoyProtectedRoute.post('/create-delivery-boy-admin-payment', PaymentTransactionController.CreateDeliveryBoyPayment);
+deliveryBoyProtectedRoute.post('/verify-delivery-boy-admin-payment', PaymentTransactionController.VerifyDeliveryBoyPayment);
+deliveryBoyProtectedRoute.post('/cancel-delivery-boy-admin-payment', PaymentTransactionController.CancelDeliveryBoyPayment);
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }

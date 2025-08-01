@@ -15,6 +15,7 @@ service PaymentService {
 message CreateDeliveryBoyPaymentRequest {
   double amount = 1;
   string deliveryBoyId = 2;
+  string role = 3;
 }
 
 message CreateDeliveryBoyPaymentResponse {
@@ -28,6 +29,7 @@ message VerifyDeliveryBoyPaymentRequest {
   string razorpayPaymentId = 2;
   string razorpaySignature = 3;
   string deliveryBoyId = 4;
+  string role = 5;
 }
 
 message VerifyDeliveryBoyPaymentResponse {
@@ -40,6 +42,7 @@ message VerifyDeliveryBoyPaymentResponse {
 message CancelDeliveryBoyPaymentRequest {
   string deliveryBoyId = 1;
   string orderId = 2 ;
+  string role = 3 ;
 }
 
 message CancelDeliveryBoyPaymentResponse {

@@ -112,10 +112,10 @@ export default class paymentTransactionController {
     };
 
     CreateDeliveryBoyPayment = async (req: Request, res: Response) => {
-        const { deliveryBoyId, amount } = req.body
+        const { deliveryBoyId, amount, role } = req.body
         try {
             PaymentService.CreateDeliveryBoyPayment({
-                deliveryBoyId, amount
+                deliveryBoyId, amount, role
             }, (err: any, result: { message: string, orderId: string; razorpayKey: string, error: string, }) => {
                 if (err) {
                     res.status(400).json({ message: result.message });
@@ -137,14 +137,16 @@ export default class paymentTransactionController {
         const { deliveryBoyId,
             razorpay_payment_id,
             razorpay_order_id,
-            razorpay_signature } = req.body
+            razorpay_signature,
+            role } = req.body
 
         try {
             PaymentService.VerifyDeliveryBoyPayment({
                 razorpayOrderId: razorpay_order_id,
                 razorpayPaymentId: razorpay_payment_id,
                 razorpaySignature: razorpay_signature,
-                deliveryBoyId
+                deliveryBoyId,
+                role
 
             }, (err: any, result: { message: string, orderId: string, success: boolean }) => {
                 if (err) {
@@ -161,9 +163,9 @@ export default class paymentTransactionController {
     }
 
     CancelDeliveryBoyPayment = async (req: Request, res: Response) => {
-        const { deliveryBoyId, orderId } = req.body;
+        const { deliveryBoyId, orderId, role } = req.body;
         try {
-            PaymentService.CancelDeliveryBoyPayment({ deliveryBoyId, orderId }, (err: any, result: { message: string; success: boolean }) => {
+            PaymentService.CancelDeliveryBoyPayment({ deliveryBoyId, orderId, role }, (err: any, result: { message: string; success: boolean }) => {
                 if (err) {
                     res.status(400).json({ message: err.message || 'Failed to cancel payment' });
                 } else {
