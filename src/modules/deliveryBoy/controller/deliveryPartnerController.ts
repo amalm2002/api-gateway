@@ -120,11 +120,11 @@ export default class DeliveryPartnerController {
         return
       }
 
-      const { name, mobile, profileImage } = deliveryBoyResponse.response;
+      const { name, mobile, profileImage,ordersCompleted } = deliveryBoyResponse.response;
 
 
       const orderAssignResponse: Message = (await orderRabbitMqClient.produce(
-        { orderId, deliveryBoyId, deliveryBoyName: name, mobile, profileImage },
+        { orderId, deliveryBoyId, deliveryBoyName: name, mobile, profileImage ,totalDeliveries:ordersCompleted},
         operation
       )) as Message;
 
