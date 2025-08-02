@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PaymentService } from "../config/payment.client";
+import { NextFunction } from "express-serve-static-core";
 
 
 export default class paymentTransactionController {
@@ -177,5 +178,27 @@ export default class paymentTransactionController {
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
+
+    GetDeliveryBoyInHandPaymentHistory = async (req: Request, res: Response, next: NextFunction) => {
+        console.log('data is :', req.query);
+        const { deliveryBoyId, role } = req.query
+        try {
+            PaymentService.GetDeliveryBoyInHandPaymentHistory({ deliveryBoyId, role }, (err: any,
+                result: { success: boolean, payments: any }) => {
+                if (err) {
+                    res.status(400).json({ message: err.message || 'Failed to fetch delivery-boy InHand payment history' });
+                } else {
+                    console.log('result :', result);
+
+                    res.status(200).json(result);
+                }
+            })
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+
+    }
 
 }

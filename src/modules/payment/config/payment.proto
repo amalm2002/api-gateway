@@ -9,6 +9,7 @@ service PaymentService {
   rpc CreateDeliveryBoyPayment(CreateDeliveryBoyPaymentRequest) returns (CreateDeliveryBoyPaymentResponse);
   rpc VerifyDeliveryBoyPayment(VerifyDeliveryBoyPaymentRequest) returns (VerifyDeliveryBoyPaymentResponse);
   rpc CancelDeliveryBoyPayment(CancelDeliveryBoyPaymentRequest) returns (CancelDeliveryBoyPaymentResponse);
+  rpc GetDeliveryBoyInHandPaymentHistory(GetDeliveryBoyInHandPaymentHistoryRequest) returns (GetDeliveryBoyInHandPaymentHistoryResponse);
 
 }
 
@@ -48,6 +49,39 @@ message CancelDeliveryBoyPaymentRequest {
 message CancelDeliveryBoyPaymentResponse {
   bool success = 1;
   string message = 2;
+}
+
+message GetDeliveryBoyInHandPaymentHistoryRequest {
+  string deliveryBoyId = 1;
+  string role = 2;
+}
+
+message Earning {
+  string date = 1;
+  double amount = 2;
+  bool paid = 3;
+}
+
+message DeliveryBoyPayment {
+  string id = 1;
+  string deliveryBoyId = 2;
+  double amount = 3;
+  double completeAmount = 4;
+  double monthlyAmount = 5;
+  double inHandCash = 6;
+  double amountToPayDeliveryBoy = 7;
+  repeated Earning earnings = 8;
+  string razorpayOrderId = 9;
+  string razorpayPaymentId = 10;
+  string status = 11;
+  string createdAt = 12;
+  string role = 13;
+}
+
+message GetDeliveryBoyInHandPaymentHistoryResponse {
+  bool success = 1;
+  string message = 2;
+  repeated DeliveryBoyPayment payments = 3;
 }
 
 message CreateOrderPaymentRequest {

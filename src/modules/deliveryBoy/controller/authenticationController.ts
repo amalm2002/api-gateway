@@ -8,53 +8,33 @@ export default class authenticationController {
 
     rigister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            // console.log('request data :', req.body);
             const { mobile } = req.body
             const operation = 'Delivery-Boy-Register'
-            const response: Message = (await deliveryBoyRabbitMqClient.produce(
-                { mobile },
-                operation
-            )) as Message
-
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({ mobile }, operation)) as Message
             res.status(200).json(response)
-
         } catch (error: any) {
             console.log(error);
-            res
-                .status(500)
-                .json({ message: "Internal Server Error" });
+            res.status(500).json({ message: "Internal Server Error" });
         }
     }
 
     deliveryBoyLocation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            // console.log('data is getting on the api-gateway :', req.body);
-
             const operation = 'Delivery-Boy-location'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({
                 ...req.body, ...req.query
             }, operation)) as Message
-
             res.status(200).json(response)
-
         } catch (error) {
             console.log('error on restaurnt location side restaurant', error);
-            res
-                .status(500)
-                .json({ message: "Internal Server Error" });
+            res.status(500).json({ message: "Internal Server Error" });
         }
     }
 
     updateDetails = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            // console.log('Request body:', req.body);
-            // console.log('Request files:', req.files);
-
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-
-
             const data = { ...req.body };
-
 
             const panCardImages = [];
             if (files['panCard[images][0]']) {
@@ -69,7 +49,6 @@ export default class authenticationController {
                 data['panCard'] = { ...data['panCard'], images: panCardImages };
             }
 
-
             const licenseImages = [];
             if (files['license[images][0]']) {
                 const url = await uploadToS3(files['license[images][0]'][0]);
@@ -82,7 +61,6 @@ export default class authenticationController {
             if (licenseImages.length > 0) {
                 data['license'] = { ...data['license'], images: licenseImages };
             }
-
 
             if (files['profileImage']) {
                 const url = await uploadToS3(files['profileImage'][0]);
@@ -111,7 +89,6 @@ export default class authenticationController {
             const response: Message = (await deliveryBoyRabbitMqClient.produce({
                 ...req.body, ...req.query
             }, operation)) as Message;
-
             res.status(200).json(response);
         } catch (error) {
             console.log('error on delivery boy vehicle update', error);
@@ -124,23 +101,18 @@ export default class authenticationController {
             const operation = 'Fetch-Delivery-Boy-Zone'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message
             res.status(200).json(response)
-
         } catch (error) {
             console.log(error);
-            res
-                .status(500)
-                .json({ message: "Internal Server Error" });
+            res.status(500).json({ message: "Internal Server Error" });
         }
     }
 
     updateZone = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const operation = 'Delivery-Boy-Zone';
-            // console.log(req.body,req.query,'=============');  
             const response: Message = (await deliveryBoyRabbitMqClient.produce({
                 ...req.body, ...req.query
             }, operation)) as Message;
-
             res.status(200).json(response);
         } catch (error) {
             console.log('error on delivery boy zone update', error);
@@ -151,12 +123,8 @@ export default class authenticationController {
     getResubmitedDocs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.params
-            console.log('iddddd :', id);
-
             const operation = 'Get-Rejected-Documents'
-            const response: Message = (await deliveryBoyRabbitMqClient.produce({
-                id
-            }, operation)) as Message
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({ id }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
             console.log('error on get delivery boy resubmit document', error);
@@ -166,17 +134,12 @@ export default class authenticationController {
 
     async reSubmittedDocuments(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            console.log('Request body for Re_sub_doc:', req.body);
-            console.log('Request files for Re_sub_doc:', req.files);
-
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             const data: any = { deliveryBoyId: req.body.deliveryBoyId };
 
             if (req.body.name) {
                 data.name = req.body.name;
             }
-
-      
             const panCardImages = [];
             if (files['panCard[images][0]']) {
                 const url = await uploadToS3(files['panCard[images][0]'][0]);
@@ -196,7 +159,6 @@ export default class authenticationController {
                 }
             }
 
-           
             const licenseImages = [];
             if (files['license[images][0]']) {
                 const url = await uploadToS3(files['license[images][0]'][0]);
@@ -226,14 +188,10 @@ export default class authenticationController {
                 }
             }
 
-     
             if (files['profileImage']) {
                 const url = await uploadToS3(files['profileImage'][0]);
                 data.profileImage = url;
             }
-
-            console.log('Data to send:', data);
-
             const operation = 'Delivery-Boy-Resubmit';
             const response: Message = (await deliveryBoyRabbitMqClient.produce(data, operation)) as Message;
 

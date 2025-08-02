@@ -61,9 +61,10 @@ deliveryBoyProtectedRoute.get('/delivery-partner/order/:id', OrderController.get
 deliveryBoyProtectedRoute.post('/check-inHand-cash-limit', DeliveryPartnerController.checkTheInHandCash)
 
 //In-Hand-Cash payment routes
-
 deliveryBoyProtectedRoute.post('/create-delivery-boy-admin-payment', PaymentTransactionController.CreateDeliveryBoyPayment);
 deliveryBoyProtectedRoute.post('/verify-delivery-boy-admin-payment', PaymentTransactionController.VerifyDeliveryBoyPayment);
 deliveryBoyProtectedRoute.post('/cancel-delivery-boy-admin-payment', PaymentTransactionController.CancelDeliveryBoyPayment);
+
+deliveryBoyProtectedRoute.get('/get-partner-in-hand-payment-history',PaymentTransactionController.GetDeliveryBoyInHandPaymentHistory)
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }

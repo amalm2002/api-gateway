@@ -4,6 +4,7 @@ import MenuController from "../restaurant/controller/menuController";
 import CartController from "./controllers/cartController";
 import OrderController from "../order/controller/orderController";
 import PaymentTransactionController from "../payment/controller/paymentTransactionController";
+import DeliveryPartnerController from "../deliveryBoy/controller/deliveryPartnerController";
 
 
 const controller = new userController();
@@ -11,6 +12,7 @@ const menuController = new MenuController();
 const cartController = new CartController()
 const orderController = new OrderController()
 const paymentTransactionController = new PaymentTransactionController()
+const deliveryBoyController = new DeliveryPartnerController()
 
 const publicRoute = express.Router();
 
@@ -59,6 +61,11 @@ protectedRoute.post('/place-order', paymentTransactionController.PlaceOrderPayme
 protectedRoute.get('/get-orders/:id', orderController.getUsersOrders)
 protectedRoute.get('/order-details/:id', orderController.getOrderDetails)
 protectedRoute.patch('/order/cancel/:orderId', orderController.cancelOrder);
+
+//review for delivery-boy
+protectedRoute.get('/get-the-delivery-boy-review',deliveryBoyController.getTheDeliveryBoyreview)
+protectedRoute.patch('/delivery-boy-review-submition', deliveryBoyController.userReviewFordeliveryBoy)
+protectedRoute.delete('/delete-delivery-boy-review',deliveryBoyController.deleteUserReview)
 
 
 export { publicRoute, protectedRoute }

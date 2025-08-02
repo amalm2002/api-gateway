@@ -186,7 +186,7 @@ export default class DeliveryPartnerController {
         return;
       }
 
-      // Step 1: Update order status to Delivered
+      // 1: Update order status to Delivered
       const orderOperation = 'Complete-Delivery';
       const orderResponse: Message = (await orderRabbitMqClient.produce(
         { orderId },
@@ -198,7 +198,7 @@ export default class DeliveryPartnerController {
         return;
       }
 
-      // Step 2: Update delivery boy (set pendingOrders to 0, increment ordersCompleted)
+      // 2: Update delivery boy (set pendingOrders to 0, increment ordersCompleted)
       const deliveryBoyOperation = 'Complete-Delivery';
       const deliveryBoyResponse: Message = (await deliveryBoyRabbitMqClient.produce(
         { orderId, deliveryBoyId },
@@ -206,7 +206,7 @@ export default class DeliveryPartnerController {
       )) as Message;
 
       if (!deliveryBoyResponse.success) {
-        // Rollback order status to previous state (e.g., Picked)
+        // rollback order status to previous state
         const rollbackResponse: Message = (await orderRabbitMqClient.produce(
           { orderId, orderStatus: 'Picked' },
           'Change-Order-Status'
@@ -228,13 +228,14 @@ export default class DeliveryPartnerController {
 
   async orderEarnings(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { paymentMethod, deliveryBoyId, finalTotalDistance, orderAmount } = req.body
+      const { paymentMethod, deliveryBoyId, finalTotalDistance, orderAmount, order_id } = req.body
       const operation = 'Order-Earnings';
       const response: Message = (await deliveryBoyRabbitMqClient.produce({
         paymentMethod,
         deliveryBoyId,
         finalTotalDistance,
-        orderAmount
+        orderAmount,
+        order_id
       }, operation)) as Message;
       res.status(200).json(response)
     } catch (error) {
@@ -242,8 +243,8 @@ export default class DeliveryPartnerController {
       res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   }
-  
-  checkTheInHandCash = async (req: Request, res: Response, next: NextFunction) => {
+
+  async checkTheInHandCash(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { deliveryBoyId } = req.body;
       const operation = 'Check-In-Hand-Cash-Limit';
@@ -251,6 +252,58 @@ export default class DeliveryPartnerController {
       res.status(200).json(response)
     } catch (error) {
       console.error('Error in checkInHandCash on delivery partner:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
+
+  async userReviewFordeliveryBoy(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { deliveryBoyId, rating, comment, orderId, userId, isEdit } = req.body
+      const operation = 'User-Review-For-Delivery-Boy'
+      const response: Message = (await deliveryBoyRabbitMqClient.produce({
+        deliveryBoyId,
+        rating,
+        comment,
+        orderId,
+        userId,
+        isEdit
+      }, operation)) as Message
+      res.status(200).json(response)
+    } catch (error) {
+      console.error('Error in submiting the review on delivery boy:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
+
+  async getTheDeliveryBoyreview(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // console.log('body data :', req.query);
+      const { userId, orderId, deliveryBoyId } = req.query
+      const operation = 'Get-The-DeliveryBoy-Review'
+      const response: Message = (await deliveryBoyRabbitMqClient.produce({
+        userId,
+        orderId,
+        deliveryBoyId
+      }, operation)) as Message;
+      res.status(200).json(response)
+    } catch (error) {
+      console.error('Error in getting the review on delivery boy:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
+
+  async deleteUserReview(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { userId, orderId, deliveryBoyId } = req.query
+      const operation = 'Delete-DeliveryBoy-Review'
+      const response: Message = (await deliveryBoyRabbitMqClient.produce({
+        userId,
+        orderId,
+        deliveryBoyId
+      }, operation)) as Message;
+      res.status(200).json(response)
+    } catch (error) {
+      console.error('Error in delete the review on delivery boy:', error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   }
