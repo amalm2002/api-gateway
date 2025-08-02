@@ -120,11 +120,11 @@ export default class DeliveryPartnerController {
         return
       }
 
-      const { name, mobile, profileImage,ordersCompleted } = deliveryBoyResponse.response;
+      const { name, mobile, profileImage, ordersCompleted } = deliveryBoyResponse.response;
 
 
       const orderAssignResponse: Message = (await orderRabbitMqClient.produce(
-        { orderId, deliveryBoyId, deliveryBoyName: name, mobile, profileImage ,totalDeliveries:ordersCompleted},
+        { orderId, deliveryBoyId, deliveryBoyName: name, mobile, profileImage, totalDeliveries: ordersCompleted },
         operation
       )) as Message;
 
@@ -258,7 +258,7 @@ export default class DeliveryPartnerController {
 
   async userReviewFordeliveryBoy(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { deliveryBoyId, rating, comment, orderId, userId, isEdit } = req.body
+      const { deliveryBoyId, rating, comment, orderId, userId, isEdit, userName } = req.body
       const operation = 'User-Review-For-Delivery-Boy'
       const response: Message = (await deliveryBoyRabbitMqClient.produce({
         deliveryBoyId,
@@ -266,7 +266,8 @@ export default class DeliveryPartnerController {
         comment,
         orderId,
         userId,
-        isEdit
+        isEdit,
+        userName
       }, operation)) as Message
       res.status(200).json(response)
     } catch (error) {

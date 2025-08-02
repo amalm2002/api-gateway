@@ -5,7 +5,7 @@ import { AuthResponse, Message } from '../../../interfaces/interface'
 export default class reviewController {
     addFoodReview = async (req: Request, res: Response, NextFunction: NextFunction) => {
         try {
-            const { itemId, rating, comment, orderId, userId, isEdit } = req.body
+            const { itemId, rating, comment, orderId, userId, isEdit, userName } = req.body
             const operation = 'Add-Food-Review'
             const response: Message = (await restaurantRabbitMqClient.produce({
                 itemId,
@@ -13,7 +13,8 @@ export default class reviewController {
                 userId,
                 rating,
                 comment,
-                isEdit
+                isEdit,
+                userName
             }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
@@ -53,4 +54,18 @@ export default class reviewController {
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     };
+
+    getFoodReviews = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { dishId } = req.query;
+            const operation = 'Get-Food-Review'
+            const response: Message = (await restaurantRabbitMqClient.produce({
+                dishId
+            }, operation)) as Message
+            res.status(200).json(response)
+        } catch (error) {
+            console.error('Error in getFoodReviews:', error);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
+    }
 }

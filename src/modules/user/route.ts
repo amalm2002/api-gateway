@@ -43,6 +43,7 @@ protectedRoute.delete('/delete-address/:id/:index', controller.deleteUserAddress
 
 //cart side 
 protectedRoute.get('/menu-item/:id', menuController.getSpecificMenu)
+protectedRoute.get('/get-menuItem/:id',menuController.getSpecificMenu)
 protectedRoute.post('/update-menu-quantities', menuController.updateMenuQuantityMenuItems)
 protectedRoute.post('/add-to-cart/:id', cartController.AddToCart)
 protectedRoute.get('/get-cart/:id', cartController.GetCartItems)
@@ -73,6 +74,9 @@ protectedRoute.delete('/delete-delivery-boy-review', deliveryBoyController.delet
 protectedRoute.post('/review-the-food', reviewController.addFoodReview)
 protectedRoute.post('/delete-food-review', reviewController.deleteFoodReview);
 protectedRoute.post('/get-user-review', reviewController.getUserReviewForFoodItem);
+
+protectedRoute.get('/get-review',reviewController.getFoodReviews)
+
 
 
 export { publicRoute, protectedRoute }
