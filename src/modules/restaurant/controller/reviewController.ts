@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import restaurantRabbitMqClient from '../rabbitmq/client'
-import { AuthResponse, Message } from '../../../interfaces/interface'
+import { Message } from '../../../interfaces/interface'
 
 export default class reviewController {
     addFoodReview = async (req: Request, res: Response, NextFunction: NextFunction) => {

@@ -6,12 +6,14 @@ import deliveryPartnerController from "./controller/deliveryPartnerController";
 import orderController from "../order/controller/orderController";
 import userController from "../user/controllers/controller";
 import paymentTransactionController from "../payment/controller/paymentTransactionController";
+import DeliveryBoyController from "../admin/controller/deliveryBoyController";
 
 const AuthenticationController = new authenticationController()
 const DeliveryPartnerController = new deliveryPartnerController()
 const PaymentTransactionController = new paymentTransactionController()
 const OrderController = new orderController()
 const UserController = new userController()
+const DeliveryController = new DeliveryBoyController()
 
 const deliveryBoyPublicRoute = express.Router()
 
@@ -65,6 +67,12 @@ deliveryBoyProtectedRoute.post('/create-delivery-boy-admin-payment', PaymentTran
 deliveryBoyProtectedRoute.post('/verify-delivery-boy-admin-payment', PaymentTransactionController.VerifyDeliveryBoyPayment);
 deliveryBoyProtectedRoute.post('/cancel-delivery-boy-admin-payment', PaymentTransactionController.CancelDeliveryBoyPayment);
 
-deliveryBoyProtectedRoute.get('/get-partner-in-hand-payment-history',PaymentTransactionController.GetDeliveryBoyInHandPaymentHistory)
+deliveryBoyProtectedRoute.get('/get-partner-in-hand-payment-history', PaymentTransactionController.GetDeliveryBoyInHandPaymentHistory)
+deliveryBoyProtectedRoute.get('/get-all-help-options', DeliveryController.getAllDeliveryBoyHelpOptions)
+
+//delivery-boy chat
+deliveryBoyProtectedRoute.get('/delivery-boy/chat-state/:id', DeliveryController.getChatState)
+deliveryBoyProtectedRoute.post('/delivery-boy/chat-state/:id', DeliveryController.saveChatState)
+deliveryBoyProtectedRoute.delete('/delivery-boy/chat-state/:id',DeliveryController.clearChatState)
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }

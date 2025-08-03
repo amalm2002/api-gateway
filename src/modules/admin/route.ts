@@ -39,13 +39,23 @@ adminRoute.patch('/updateDeliveryBoyStatus/:id', deliveryBoyController.updateDel
 adminRoute.get('/getDeliveryBoy/:id', deliveryBoyController.fetchDeliveryBoyDetails)
 adminRoute.post('/verifyDeliveryBoyDocs/:id', deliveryBoyController.verifyDeliveryBoyDocuments)
 adminRoute.post('/rejectDeliveryBoyDocs', deliveryBoyController.rejectedDeliveryBoyDocuments)
+
+//delivery-boy add payment rule depends on KM
 adminRoute.post('/add-ride-payment-rule', deliveryBoyController.addRidePaymentRule)
 adminRoute.get('/fetch-ride-rate-payment', deliveryBoyController.getRideRatePaymentRules)
 adminRoute.put('/update-ride-payment-rule/:id', deliveryBoyController.updateRidePaymentRule);
 adminRoute.put('/block-ride-payment-rule/:id', deliveryBoyController.blockRidePaymentRule);
 adminRoute.put('/unblock-ride-payment-rule/:id', deliveryBoyController.unblockRidePaymentRule)
+
+//delivery-boy earnings payments
 adminRoute.post('/create-delivery-partner-order', paymentTransactionController.CreateDeliveryBoyPayment)
 adminRoute.post('/verify-payment-delivery-partner', paymentTransactionController.VerifyDeliveryBoyPayment)
 adminRoute.post('/cancel-delivery-partner-payment', paymentTransactionController.CancelDeliveryBoyPayment);
+
+//delivery-boy help options
+adminRoute.post('/delivery-boy/add-help-option', deliveryBoyController.addDeliveryBoyHelpOptions)
+adminRoute.put('/delivery-boy/update-help-option/:id', deliveryBoyController.updateDeliveryBoyHelpOptions);
+adminRoute.delete('/delivery-boy/delete-help-option/:id', deliveryBoyController.deleteDeliveryBoyHelpOptions);
+adminRoute.get('/delivery-boy/get-all-help-options', deliveryBoyController.getAllDeliveryBoyHelpOptions);
 
 export default adminRoute
