@@ -58,4 +58,7 @@ adminRoute.put('/delivery-boy/update-help-option/:id', deliveryBoyController.upd
 adminRoute.delete('/delivery-boy/delete-help-option/:id', deliveryBoyController.deleteDeliveryBoyHelpOptions);
 adminRoute.get('/delivery-boy/get-all-help-options', deliveryBoyController.getAllDeliveryBoyHelpOptions);
 
+adminRoute.get('/get-all-concern',deliveryBoyController.getAllConcerns)
+adminRoute.patch('/verify-concern',deliveryBoyController.verifyTheConcern)
+
 export default adminRoute

@@ -6,7 +6,7 @@ import { Message } from "../../../interfaces/interface";
 
 export default class deliveryBoyController {
 
-    zoneCreation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async zoneCreation(req: Request, res: Response, next: NextFunction) {
         try {
             const operation = 'Zone-Creation'
             const response: Message = (await deliveryBoyRabbitMqClient.produce(
@@ -20,7 +20,7 @@ export default class deliveryBoyController {
         }
     }
 
-    fetchZones = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async fetchZones(req: Request, res: Response, next: NextFunction) {
         try {
             const operation = 'Fetch-Delivery-Boy-Zone'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message
@@ -32,7 +32,7 @@ export default class deliveryBoyController {
         }
     }
 
-    deleteZone = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async deleteZone(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params
             const operation = 'Delete-Delivery-Boy-Zone'
@@ -44,7 +44,7 @@ export default class deliveryBoyController {
         }
     }
 
-    fetchDeliveryBoys = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async fetchDeliveryBoys(req: Request, res: Response, next: NextFunction) {
         try {
             const operation = 'Fetch-All-Delivery-Boys'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message
@@ -55,7 +55,7 @@ export default class deliveryBoyController {
         }
     }
 
-    updateDeliveryBoyStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async updateDeliveryBoyStatus(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params
             const operation = 'Update-The-Delivery-Boy-Status'
@@ -68,7 +68,7 @@ export default class deliveryBoyController {
         }
     }
 
-    fetchDeliveryBoyDetails = async (req: Request, res: Response, next: NextFunction) => {
+    async fetchDeliveryBoyDetails(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params
             const operation = 'Fetch-The-Delivery-Boy-Deatils'
@@ -80,7 +80,7 @@ export default class deliveryBoyController {
         }
     }
 
-    verifyDeliveryBoyDocuments = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async verifyDeliveryBoyDocuments(req: Request, res: Response, next: NextFunction) {
         try {
             const deliveryBoyId = req.params.id
             const operation = 'Verify-Delivery-Boy-Documents'
@@ -95,7 +95,7 @@ export default class deliveryBoyController {
         }
     }
 
-    rejectedDeliveryBoyDocuments = async (req: Request, res: Response, next: NextFunction) => {
+    async rejectedDeliveryBoyDocuments(req: Request, res: Response, next: NextFunction) {
         try {
             const { deliveryBoyId, rejectionReason } = req.body
             const operation = 'Rejected-DeliveryBoy-Documents'
@@ -109,7 +109,7 @@ export default class deliveryBoyController {
         }
     }
 
-    addRidePaymentRule = async (req: Request, res: Response, next: NextFunction) => {
+    async addRidePaymentRule(req: Request, res: Response, next: NextFunction) {
         try {
             const operation = 'Add-Ride-Payment-Rule';
             const response: Message = (await deliveryBoyRabbitMqClient.produce({
@@ -122,7 +122,7 @@ export default class deliveryBoyController {
         }
     }
 
-    getRideRatePaymentRules = async (req: Request, res: Response, next: NextFunction) => {
+    async getRideRatePaymentRules(req: Request, res: Response, next: NextFunction) {
         try {
             const operation = 'Get-Ride-Rate-Payment-Rules';
             const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message;
@@ -303,6 +303,31 @@ export default class deliveryBoyController {
             res.status(200).json(response);
         } catch (error) {
             console.error('Error in submitZoneChangeRequest:', error);
+            res.status(500).json({ success: false, message: 'Internal error' });
+        }
+    }
+
+    async getAllConcerns(req: Request, res: Response, next: NextFunction) {
+        try {
+            const operation = 'Get-All-Concerns'
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({}, operation)) as Message;
+            res.status(200).json(response)
+        } catch (error) {
+            console.error('Error in get all concerns:', error);
+            res.status(500).json({ success: false, message: 'Internal error' });
+        }
+    }
+
+    async verifyTheConcern(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id, newStatus, rejectionReason } = req.body;
+            console.log('body :', req.body);
+
+            const operation = 'Verify-Concern'
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({ id, newStatus, rejectionReason }, operation)) as Message
+            res.status(200).json(response)
+        } catch (error) {
+            console.error('Error in verify concern side:', error);
             res.status(500).json({ success: false, message: 'Internal error' });
         }
     }
