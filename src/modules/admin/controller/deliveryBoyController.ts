@@ -230,7 +230,6 @@ export default class deliveryBoyController {
 
     async getChatState(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('getChatState data:', req.params.id);
             const deliveryBoyId = req.params.id;
             const operation = 'Get-Chat-State';
             const response: Message = (await deliveryBoyRabbitMqClient.produce({ deliveryBoyId }, operation)) as Message;
@@ -243,7 +242,6 @@ export default class deliveryBoyController {
 
     async saveChatState(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('saveChatState data:', req.body, req.params.id);
             const deliveryBoyId = req.params.id;
             const state = req.body;
             const operation = 'Save-Chat-State';
@@ -257,13 +255,54 @@ export default class deliveryBoyController {
 
     async clearChatState(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('clearChatState data:', req.params.id);
             const deliveryBoyId = req.params.id;
             const operation = 'Clear-Chat-State';
             const response: Message = (await deliveryBoyRabbitMqClient.produce({ deliveryBoyId }, operation)) as Message;
             res.status(200).json(response);
         } catch (error) {
             console.error('Error in clearChatState:', error);
+            res.status(500).json({ success: false, message: 'Internal error' });
+        }
+    }
+
+    async submitConcers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { deliveryBoyId, selectedOption, reason, description } = req.body;
+            const operation = 'Submit-Concern';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce(
+                {
+                    deliveryBoyId,
+                    selectedOption,
+                    reason,
+                    description,
+                },
+                operation
+            )) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.error('Error in submitConcers:', error);
+            res.status(500).json({ success: false, message: 'Internal error' });
+        }
+    }
+
+    async submitZoneChangeRequest(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { deliveryBoyId, concernId, zoneId, zoneName, reason, description } = req.body;
+            const operation = 'Submit-Zone-Change';
+            const response: Message = (await deliveryBoyRabbitMqClient.produce(
+                {
+                    deliveryBoyId,
+                    concernId,
+                    zoneId,
+                    zoneName,
+                    reason,
+                    description,
+                },
+                operation
+            )) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.error('Error in submitZoneChangeRequest:', error);
             res.status(500).json({ success: false, message: 'Internal error' });
         }
     }

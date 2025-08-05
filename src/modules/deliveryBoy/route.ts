@@ -73,6 +73,8 @@ deliveryBoyProtectedRoute.get('/get-all-help-options', DeliveryController.getAll
 //delivery-boy chat
 deliveryBoyProtectedRoute.get('/delivery-boy/chat-state/:id', DeliveryController.getChatState)
 deliveryBoyProtectedRoute.post('/delivery-boy/chat-state/:id', DeliveryController.saveChatState)
-deliveryBoyProtectedRoute.delete('/delivery-boy/chat-state/:id',DeliveryController.clearChatState)
+deliveryBoyProtectedRoute.delete('/delivery-boy/chat-state/:id', DeliveryController.clearChatState)
+deliveryBoyProtectedRoute.patch('/delivery-boy/chat-state/concern', DeliveryController.submitConcers);
+deliveryBoyProtectedRoute.patch('/delivery-boy/chat-state/zone', DeliveryController.submitZoneChangeRequest);
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }
