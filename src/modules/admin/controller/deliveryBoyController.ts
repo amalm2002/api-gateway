@@ -1,5 +1,5 @@
 
-import { Response, Request, NextFunction } from "express";
+import { Response, Request, NextFunction, query } from "express";
 import deliveryBoyRabbitMqClient from '../../deliveryBoy/rabbitMq/client'
 import { Message } from "../../../interfaces/interface";
 
@@ -321,13 +321,24 @@ export default class deliveryBoyController {
     async verifyTheConcern(req: Request, res: Response, next: NextFunction) {
         try {
             const { id, newStatus, rejectionReason } = req.body;
-            console.log('body :', req.body);
-
             const operation = 'Verify-Concern'
             const response: Message = (await deliveryBoyRabbitMqClient.produce({ id, newStatus, rejectionReason }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
             console.error('Error in verify concern side:', error);
+            res.status(500).json({ success: false, message: 'Internal error' });
+        }
+    }
+
+    async getConcerns(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log('deee :', req.query);
+            const deliveryBoyId = req.query.deliveryBoyId
+            const operation = 'Get-The-Delivery-Boy-Concern-Result'
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({ deliveryBoyId }, operation)) as Message;
+            res.status(200).json(response)
+        } catch (error) {
+            console.error('Error in get concern side:', error);
             res.status(500).json({ success: false, message: 'Internal error' });
         }
     }

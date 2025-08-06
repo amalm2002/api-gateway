@@ -76,5 +76,6 @@ deliveryBoyProtectedRoute.post('/delivery-boy/chat-state/:id', DeliveryControlle
 deliveryBoyProtectedRoute.delete('/delivery-boy/chat-state/:id', DeliveryController.clearChatState)
 deliveryBoyProtectedRoute.patch('/delivery-boy/chat-state/concern', DeliveryController.submitConcers);
 deliveryBoyProtectedRoute.patch('/delivery-boy/chat-state/zone', DeliveryController.submitZoneChangeRequest);
+deliveryBoyProtectedRoute.get('/deivery-boy/concern', DeliveryController.getConcerns)
 
 export { deliveryBoyPublicRoute, deliveryBoyProtectedRoute }
