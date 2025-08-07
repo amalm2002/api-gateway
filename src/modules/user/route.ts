@@ -59,6 +59,7 @@ protectedRoute.delete('/delete-user-cart/:id', cartController.DeleteUserCart)
 protectedRoute.post('/create-order', paymentTransactionController.CreateOrderPayment)
 protectedRoute.post('/verify-payment', paymentTransactionController.VerifyUpiPayment)
 protectedRoute.post('/place-order', paymentTransactionController.PlaceOrderPayment)
+protectedRoute.post('/handle-failed-payment', paymentTransactionController.HandleFailedPayment);
 
 //order side
 protectedRoute.get('/get-orders/:id', orderController.getUsersOrders)

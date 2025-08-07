@@ -6,6 +6,7 @@ service PaymentService {
   rpc CreateOrderPayment(CreateOrderPaymentRequest) returns (OrderPaymentResponse);
   rpc PlaceOrder(PlaceOrderRequest) returns (PlaceOrderResponse);
   rpc VerifyUpiPayment(VerifyUpiPaymentRequest) returns (VerifyUpiPaymentResponse);
+  rpc HandleFailedPayment(HandleFailedPaymentRequest) returns (HandleFailedPaymentResponse);
   rpc CreateDeliveryBoyPayment(CreateDeliveryBoyPaymentRequest) returns (CreateDeliveryBoyPaymentResponse);
   rpc VerifyDeliveryBoyPayment(VerifyDeliveryBoyPaymentRequest) returns (VerifyDeliveryBoyPaymentResponse);
   rpc CancelDeliveryBoyPayment(CancelDeliveryBoyPaymentRequest) returns (CancelDeliveryBoyPaymentResponse);
@@ -187,4 +188,18 @@ message OrderData {
   string phoneNumber = 9;
   string paymentMethod = 10;
   string paymentId = 11;
+}
+
+message HandleFailedPaymentRequest {
+  string paymentDbId = 1;
+  string userId = 2;
+  string razorpayOrderId = 3;
+  string razorpayPaymentId = 4;
+  string errorDescription = 5;
+  string errorCode = 6;
+}
+
+message HandleFailedPaymentResponse {
+  bool success = 1;
+  string message = 2;
 }

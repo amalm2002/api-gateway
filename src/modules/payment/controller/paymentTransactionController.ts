@@ -112,6 +112,36 @@ export default class paymentTransactionController {
         }
     };
 
+    HandleFailedPayment = async (req: Request, res: Response) => {
+        try {
+            const { paymentDbId, userId, razorpay_order_id, razorpay_payment_id, error_description, error_code } = req.body;
+
+            PaymentService.HandleFailedPayment(
+                {
+                    paymentDbId,
+                    userId,
+                    razorpayOrderId: razorpay_order_id,
+                    razorpayPaymentId: razorpay_payment_id,
+                    errorDescription: error_description,
+                    errorCode: error_code,
+                },
+                (err: any, result: { message: string; success: boolean }) => {
+                    if (err) {
+                        res.status(400).json({ message: err.message || 'Failed to process payment failure' });
+                    } else {
+                        res.status(200).json({
+                            message: result.message,
+                            success: result.success,
+                        });
+                    }
+                }
+            );
+        } catch (error) {
+            console.error('Error in HandleFailedPayment:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    };
+
     CreateDeliveryBoyPayment = async (req: Request, res: Response) => {
         const { deliveryBoyId, amount, role } = req.body
         try {
