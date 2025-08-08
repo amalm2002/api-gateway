@@ -204,6 +204,9 @@ export default class userController {
 
   GetUserById = async (req: Request, res: Response) => {
     try {
+      console.log('request body :', req.body);
+
+
       UserService.GetUserById({ id: req.params.id }, (err: any, result: any) => {
         if (err) {
           res.status(400).json({ message: err.message });

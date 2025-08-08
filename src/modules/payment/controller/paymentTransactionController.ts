@@ -6,6 +6,8 @@ import { NextFunction } from "express-serve-static-core";
 export default class paymentTransactionController {
     PlaceOrderPayment = async (req: Request, res: Response) => {
         try {
+            console.log('bodyyyyyy :', req.body);
+
             PaymentService.PlaceOrder({
                 ...req.body
             }, (err: any, result: { message: string, orderId: string, paymentId: string, success: boolean }) => {
@@ -28,6 +30,8 @@ export default class paymentTransactionController {
 
     CreateOrderPayment = async (req: Request, res: Response) => {
         try {
+            console.log('create bodyyyyyy :', req.body);
+
             PaymentService.CreateOrderPayment({
                 ...req.body
             }, (err: any, result: { message: string; orderId: string; razorpayKey: string, error: string, paymentDbId: string }) => {
@@ -52,6 +56,8 @@ export default class paymentTransactionController {
 
     VerifyUpiPayment = async (req: Request, res: Response) => {
         try {
+            console.log('verify bodyyyyyy :', req.body);
+
             const {
                 paymentDbId,
                 razorpay_order_id,
@@ -67,6 +73,7 @@ export default class paymentTransactionController {
                 razorpaySignature: razorpay_signature,
                 orderData: {
                     userId: orderData.userId,
+                    userName: orderData.userName,
                     subtotal: orderData.subtotal,
                     deliveryFee: orderData.deliveryFee,
                     tax: orderData.tax,

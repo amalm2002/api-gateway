@@ -52,10 +52,6 @@ protectedRoute.delete('/remove-cart-item/:userId/:id', cartController.RemoveCart
 protectedRoute.delete('/delete-user-cart/:id', cartController.DeleteUserCart)
 
 //check out side 
-// protectedRoute.post('/create-order', orderController.createOrder)
-// protectedRoute.post('/verify-payment', orderController.verifyPayment)
-// protectedRoute.post('/place-order', orderController.placeOrder)
-
 protectedRoute.post('/create-order', paymentTransactionController.CreateOrderPayment)
 protectedRoute.post('/verify-payment', paymentTransactionController.VerifyUpiPayment)
 protectedRoute.post('/place-order', paymentTransactionController.PlaceOrderPayment)

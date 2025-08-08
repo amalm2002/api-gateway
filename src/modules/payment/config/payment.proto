@@ -118,17 +118,18 @@ message OrderPaymentResponse {
 
 message PlaceOrderRequest {
   string userId = 1;
-  repeated CartItems cartItems = 2;
+  string userName = 2;
+  repeated CartItems cartItems = 4;
 
-  double subtotal = 3;
-  double deliveryFee = 4;
-  double tax = 5;
-  double total = 6;
+  double subtotal = 5;
+  double deliveryFee = 6;
+  double tax = 7;
+  double total = 8;
 
-  Location location = 7;
-  string address = 8;
-  string phoneNumber = 9;
-  string paymentMethod = 10;
+  Location location = 9;
+  string address = 10;
+  string phoneNumber = 11;
+  string paymentMethod = 12;
 }
 
 message CartItems {
@@ -188,6 +189,7 @@ message OrderData {
   string phoneNumber = 9;
   string paymentMethod = 10;
   string paymentId = 11;
+  string userName = 12;
 }
 
 message HandleFailedPaymentRequest {
