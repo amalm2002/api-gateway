@@ -30,6 +30,27 @@ export default class OrderController {
         }
     }
 
+    fetchDashboardStats = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { restaurantId } = req.params;
+            const { period, startDate, endDate } = req.query;
+            const operation = 'Get-Dashboard-Stats';
+            const response = await orderServiceRabbitMqClient.produce(
+                {
+                    restaurantId,
+                    period: period as string,
+                    startDate: startDate as string,
+                    endDate: endDate as string,
+                },
+                operation
+            );
+            res.status(200).json(response);
+        } catch (error) {
+            console.error('Error in get-dashboard-stats:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+
     createOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const operation = 'Create-Order';

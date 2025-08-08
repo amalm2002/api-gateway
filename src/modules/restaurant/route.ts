@@ -13,7 +13,7 @@ const AuthController = new restaurantAuthController()
 const MenuController = new menuController()
 const SubscriptionPlanController = new subscriptionPlanController()
 const OrderController = new orderController()
-const UserController=new userController()
+const UserController = new userController()
 
 //register side
 publicRestaurantRoute.post('/restaurant-checking', AuthController.checkRegistration)
@@ -56,8 +56,9 @@ protectedRestaurantRoute.post('/payment/retry/:id', SubscriptionPlanController.r
 protectedRestaurantRoute.get('/payment/history/:id', SubscriptionPlanController.getTheTransactionHistory)
 protectedRestaurantRoute.get('/payment/details/:id', SubscriptionPlanController.getTheTransactionDetails)
 protectedRestaurantRoute.get('/orders/:id', OrderController.getAllOrders)
+protectedRestaurantRoute.get('/dashboard-stats/:restaurantId', OrderController.fetchDashboardStats)
 protectedRestaurantRoute.patch('/order/status/:id', OrderController.changeOrderStatus)
-protectedRestaurantRoute.get('/get-location/:id',AuthController.getRestaurantById)
+protectedRestaurantRoute.get('/get-location/:id', AuthController.getRestaurantById)
 // protectedRestaurantRoute.post('/customers',UserController.GetUserById)
 
 export { publicRestaurantRoute, protectedRestaurantRoute }
