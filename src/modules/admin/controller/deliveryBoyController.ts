@@ -342,4 +342,16 @@ export default class deliveryBoyController {
             res.status(500).json({ success: false, message: 'Internal error' });
         }
     }
+
+    getDeliveryBoyChartData = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Get-DeliveryBoy-Chart-Data';
+            const { startDate, endDate } = req.query;
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({ startDate, endDate }, operation)) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in get delivery boy chart data:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    };
 }

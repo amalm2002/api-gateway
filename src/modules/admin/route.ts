@@ -61,4 +61,8 @@ adminRoute.get('/delivery-boy/get-all-help-options', deliveryBoyController.getAl
 adminRoute.get('/get-all-concern',deliveryBoyController.getAllConcerns)
 adminRoute.patch('/verify-concern',deliveryBoyController.verifyTheConcern)
 
+//dashboard section
+adminRoute.get('/getRestaurantChartData', restaurantController.getRestaurantChartData);
+adminRoute.get('/getDeliveryBoyChartData', deliveryBoyController.getDeliveryBoyChartData);
+
 export default adminRoute

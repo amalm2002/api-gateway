@@ -8,7 +8,7 @@ export default class restaurantController {
 
     getAllRestaurants = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { search, status } = req.query; 
+            const { search, status } = req.query;
             const operation = 'Get-All-Restaurants';
             const payload = { search: search as string, status: status as string };
             const response: Message = (await restaurantRabbitMqClient.produce(payload,
@@ -138,4 +138,16 @@ export default class restaurantController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
+    getRestaurantChartData = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const operation = 'Get-Restaurant-Chart-Data';
+            const { startDate, endDate } = req.query;
+            const response: Message = (await restaurantRabbitMqClient.produce({ startDate, endDate }, operation)) as Message;
+            res.status(200).json(response);
+        } catch (error) {
+            console.log('Error in get restaurant chart data:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    };
 }
