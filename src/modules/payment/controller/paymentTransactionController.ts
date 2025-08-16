@@ -6,7 +6,7 @@ import { NextFunction } from "express-serve-static-core";
 export default class paymentTransactionController {
     PlaceOrderPayment = async (req: Request, res: Response) => {
         try {
-            console.log('bodyyyyyy :', req.body);
+            // console.log('bodyyyyyy :', req.body);
 
             PaymentService.PlaceOrder({
                 ...req.body

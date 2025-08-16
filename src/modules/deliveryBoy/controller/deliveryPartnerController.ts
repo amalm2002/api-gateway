@@ -82,74 +82,12 @@ export default class DeliveryPartnerController {
 
   async assignOrderOnDeliveryPartner(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-
       const { orderId, deliveryBoyId } = req.body;
-      const id = deliveryBoyId
-      const operation = 'Assign-Delivery-Boy';
-      const fetchDeliveryBoyOperation = 'Fetch-The-Delivery-Boy-Deatils';
-      const checkOrderOperation = 'Get-Order-Details';
-
+      const checkOrderOperation = 'Get-Order-Detail';
       const orderResponse: Message = (await orderRabbitMqClient.produce(
-        { orderId },
+        { orderId, deliveryBoyId },
         checkOrderOperation
       )) as Message;
-
-      if (!orderResponse.success || !orderResponse.data) {
-        res.status(400).json({ success: false, message: 'Order not found' });
-        return
-      }
-
-      if (orderResponse.data.deliveryBoy?.id) {
-        res.status(400).json({ success: false, message: 'Order already assigned to another delivery boy' });
-        return
-      }
-
-      if (!['Preparing', 'Pending'].includes(orderResponse.data.orderStatus)) {
-        res.status(400).json({ success: false, message: 'Order cannot be assigned in current status' });
-        return
-      }
-
-      const deliveryBoyResponse: Message = (await deliveryBoyRabbitMqClient.produce(
-        { id },
-        fetchDeliveryBoyOperation
-      )) as Message;
-
-
-      if (!deliveryBoyResponse.response) {
-        res.status(400).json({ success: false, message: 'Delivery boy not found' });
-        return
-      }
-
-      const { name, mobile, profileImage, ordersCompleted } = deliveryBoyResponse.response;
-
-
-      const orderAssignResponse: Message = (await orderRabbitMqClient.produce(
-        { orderId, deliveryBoyId, deliveryBoyName: name, mobile, profileImage, totalDeliveries: ordersCompleted },
-        operation
-      )) as Message;
-
-      if (!orderAssignResponse.success) {
-        res.status(400).json({ success: false, message: orderAssignResponse.message });
-        return
-      }
-
-
-      const deliveryBoyUpdate: Message = (await deliveryBoyRabbitMqClient.produce(
-        { orderId, deliveryBoyId },
-        operation
-      )) as Message;
-
-      if (deliveryBoyUpdate.status !== 'success') {
-
-        const rollbackResponse: Message = (await orderRabbitMqClient.produce(
-          { orderId, deliveryBoy: null },
-          'Remove-Delivery-Boy'
-        )) as Message;
-
-        res.status(400).json({ success: false, message: deliveryBoyUpdate.message || 'Failed to update delivery boy' });
-        return;
-      }
-
       res.status(200).json({ success: true, message: 'Order assigned successfully' });
     } catch (error) {
       console.error('Error in assignOrderOnDeliveryPartner:', error);
@@ -278,7 +216,6 @@ export default class DeliveryPartnerController {
 
   async getTheDeliveryBoyreview(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // console.log('body data :', req.query);
       const { userId, orderId, deliveryBoyId } = req.query
       const operation = 'Get-The-DeliveryBoy-Review'
       const response: Message = (await deliveryBoyRabbitMqClient.produce({
