@@ -8,13 +8,10 @@ import MenuController from '../../restaurant/controller/menuController';
 
 export default class OrderController {
 
-    private walletController: WalletController;
-    private menuController: MenuController;
-
-    constructor() {
-        this.walletController = new WalletController();
-        this.menuController = new MenuController()
-    }
+    constructor(
+        private readonly _walletController: WalletController,
+        private readonly _menuController: MenuController
+    ) { }
 
     getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -142,14 +139,14 @@ export default class OrderController {
                 operation
             )) as Message;
             if (response.success) {
-                const updateMenuQtyResponse = await this.menuController.cancelOrderMenuQuantityUpdate({
+                const updateMenuQtyResponse = await this._menuController.cancelOrderMenuQuantityUpdate({
                     userId: response.refundData.userId,
                     restaurantId: response.refundData.restaurantId,
                     items: response.refundData.items
                 })
             }
             if (response.success && response.refundRequired) {
-                const walletResponse = await this.walletController.updateWallet({
+                const walletResponse = await this._walletController.updateWallet({
                     userId: response.refundData.userId,
                     amount: response.refundData.amount,
                     description: `Refund for order ${orderId}`,
@@ -169,10 +166,6 @@ export default class OrderController {
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     };
-
-    updateDeliveryBoy = async () => {
-
-    }
 
     verifyOrderNumber = async (req: Request, res: Response) => {
         try {

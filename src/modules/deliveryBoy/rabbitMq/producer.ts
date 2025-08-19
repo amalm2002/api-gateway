@@ -6,22 +6,22 @@ import EventEmitter from "events";
 
 export default class Producer {
     constructor(
-        private channel: Channel,
-        private replyQueueName: string,
-        private eventEmitter: EventEmitter
+        private readonly _channel: Channel,
+        private readonly _replyQueueName: string,
+        private readonly _eventEmitter: EventEmitter
     ) { }
 
     async produceMessage(data: any, operation: any) {
         try {
-            console.log(this.replyQueueName, 'replyQueueName for deliveryBoy...');
+            console.log(this._replyQueueName, 'replyQueueName for deliveryBoy...');
 
             const uuid = randomUUID();
 
-            this.channel.sendToQueue(
+            this._channel.sendToQueue(
                 rabbitmqConfig.queues.deliveryBoyQueue,
                 Buffer.from(JSON.stringify(data)),
                 {
-                    replyTo: this.replyQueueName,
+                    replyTo: this._replyQueueName,
                     correlationId: uuid,
                     expiration: 10000,
                     headers: {
@@ -33,7 +33,7 @@ export default class Producer {
             console.log('Message sent to queue');
 
             return new Promise((res, rej) => {
-                this.eventEmitter.once(uuid, async (reply) => {
+                this._eventEmitter.once(uuid, async (reply) => {
                     try {
                         // console.log('Reply received:', reply);
                         const replyDataString = Buffer.from(reply.content).toString('utf-8');

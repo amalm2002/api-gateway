@@ -8,12 +8,6 @@ import orderRabbitMqClient from '../../order/rabbitmq/client';
 
 export default class DeliveryPartnerController {
 
-  private orderController: OrderController
-
-  constructor() {
-    this.orderController = new OrderController()
-  }
-
   async enableTheOnlineOption(req: Request, res: Response, next: NextFunction) {
     try {
       const deliveryBoyId = req.params.id;

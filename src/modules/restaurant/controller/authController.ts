@@ -5,11 +5,9 @@ import DeliveryPartnerController from '../../deliveryBoy/controller/deliveryPart
 
 export default class restaurantAuthController {
 
-    private deliveryTrackingController: DeliveryPartnerController
-
-    constructor() {
-        this.deliveryTrackingController = new DeliveryPartnerController();
-    }
+    constructor(
+        private readonly _deliveryTrackingController: DeliveryPartnerController
+    ) { }
 
     checkRegistration = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -164,7 +162,7 @@ export default class restaurantAuthController {
                 operation
             )) as Message;
             if (response.success && response.data) {
-                const deliveryBoyResponse = await this.deliveryTrackingController.findNearestDeliveryPartner(response.data);
+                const deliveryBoyResponse = await this._deliveryTrackingController.findNearestDeliveryPartner(response.data);
                 res.status(200).json({
                     success: true,
                     restaurant: response.data,

@@ -7,11 +7,15 @@ import orderController from "../order/controller/orderController";
 import userController from "../user/controllers/controller";
 import paymentTransactionController from "../payment/controller/paymentTransactionController";
 import DeliveryBoyController from "../admin/controller/deliveryBoyController";
+import walletController from "../user/controllers/walletController";
+import menuController from "../restaurant/controller/menuController";
 
+const WalletController = new walletController()
+const MenuController = new menuController()
 const AuthenticationController = new authenticationController()
 const DeliveryPartnerController = new deliveryPartnerController()
 const PaymentTransactionController = new paymentTransactionController()
-const OrderController = new orderController()
+const OrderController = new orderController(WalletController, MenuController)
 const UserController = new userController()
 const DeliveryController = new DeliveryBoyController()
 

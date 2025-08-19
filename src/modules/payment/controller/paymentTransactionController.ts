@@ -6,8 +6,6 @@ import { NextFunction } from "express-serve-static-core";
 export default class paymentTransactionController {
     PlaceOrderPayment = async (req: Request, res: Response) => {
         try {
-            // console.log('bodyyyyyy :', req.body);
-
             PaymentService.PlaceOrder({
                 ...req.body
             }, (err: any, result: { message: string, orderId: string, paymentId: string, success: boolean }) => {
@@ -30,8 +28,6 @@ export default class paymentTransactionController {
 
     CreateOrderPayment = async (req: Request, res: Response) => {
         try {
-            console.log('create bodyyyyyy :', req.body);
-
             PaymentService.CreateOrderPayment({
                 ...req.body
             }, (err: any, result: { message: string; orderId: string; razorpayKey: string, error: string, paymentDbId: string }) => {
@@ -56,8 +52,6 @@ export default class paymentTransactionController {
 
     VerifyUpiPayment = async (req: Request, res: Response) => {
         try {
-            console.log('verify bodyyyyyy :', req.body);
-
             const {
                 paymentDbId,
                 razorpay_order_id,
@@ -217,7 +211,6 @@ export default class paymentTransactionController {
     };
 
     GetDeliveryBoyInHandPaymentHistory = async (req: Request, res: Response, next: NextFunction) => {
-        console.log('data is :', req.query);
         const { deliveryBoyId, role } = req.query
         try {
             PaymentService.GetDeliveryBoyInHandPaymentHistory({ deliveryBoyId, role }, (err: any,

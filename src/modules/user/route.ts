@@ -6,12 +6,13 @@ import OrderController from "../order/controller/orderController";
 import PaymentTransactionController from "../payment/controller/paymentTransactionController";
 import DeliveryPartnerController from "../deliveryBoy/controller/deliveryPartnerController";
 import ReviewController from "../restaurant/controller/reviewController";
+import WalletController from "./controllers/walletController";
 
-
+const walletController=new WalletController()
 const controller = new userController();
 const menuController = new MenuController();
 const cartController = new CartController()
-const orderController = new OrderController()
+const orderController = new OrderController(walletController,menuController)
 const paymentTransactionController = new PaymentTransactionController()
 const deliveryBoyController = new DeliveryPartnerController()
 const reviewController = new ReviewController()

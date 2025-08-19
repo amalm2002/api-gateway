@@ -107,8 +107,6 @@ export default class CartController {
                     console.log('deleteUser err :', err);
                     res.status(400).json({ message: err.message });
                 } else {
-                    console.log('result :', result);
-
                     res.status(200).json({ message: result.message, success: result.success });
                 }
             })

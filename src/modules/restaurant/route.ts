@@ -6,13 +6,17 @@ import upload from "../../middleware/multer";
 import subscriptionPlanController from "./controller/subscriptionPlanController";
 import orderController from "../order/controller/orderController";
 import userController from "../user/controllers/controller";
+import walletController from "../user/controllers/walletController";
+import deliveryPartnerController from "../deliveryBoy/controller/deliveryPartnerController";
 
+const DeliveryBoyPaymentController=new deliveryPartnerController()
+const WalletController=new walletController()
 const publicRestaurantRoute = express.Router()
 const uploadCloud = multer();
-const AuthController = new restaurantAuthController()
+const AuthController = new restaurantAuthController(DeliveryBoyPaymentController)
 const MenuController = new menuController()
 const SubscriptionPlanController = new subscriptionPlanController()
-const OrderController = new orderController()
+const OrderController = new orderController(WalletController,MenuController)
 const UserController = new userController()
 
 //register side
