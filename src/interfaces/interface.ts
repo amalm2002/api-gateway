@@ -32,7 +32,7 @@ export interface UserCredentials {
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
-  message: string;
+  message?: string;
 }
 
 export interface UserInterface extends Document {

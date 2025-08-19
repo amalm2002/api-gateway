@@ -172,7 +172,6 @@ export default class menuController {
 
     updateMenuQuantityMenuItems = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('update-menu-quantity body data :', req.body);
             const operation = 'Update-Menu-Quantity'
             const response: Message = (await restaurantRabbitMqClient.produce({ ...req.body }, operation)) as Message
             res.status(200).json(response);

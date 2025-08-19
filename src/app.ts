@@ -2,7 +2,6 @@ import compression from "compression";
 import express, { Application } from "express";
 import helmet from "helmet";
 import cors from 'cors';
-import logger from "morgan";
 import http from 'http';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
@@ -12,7 +11,6 @@ import authRoute from "./modules/auth/route"
 import adminRoute from "./modules/admin/route";
 import {deliveryBoyPublicRoute,deliveryBoyProtectedRoute} from "./modules/deliveryBoy/route";
 import { isValidated } from "./modules/auth/controller";
-import { setupSocketIO } from "./modules/socket/socket";
 import { morganMiddleware } from "./middleware/centerlized-logging";
 import { generalRateLimiter } from "./middleware/rateLimiter";
 
@@ -25,7 +23,6 @@ class App {
     this.server = http.createServer(this.app);
     this.applyMiddleware();
     this.routes();
-    setupSocketIO(this.server);
   }
 
   private applyMiddleware(): void {
@@ -38,7 +35,6 @@ class App {
 
     this.app.use(compression());
     this.app.use(helmet());
-    // this.app.use(logger('dev'));
     this.app.use(cookieParser());
     this.app.use(generalRateLimiter)
   }
