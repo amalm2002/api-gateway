@@ -15,11 +15,34 @@ export default class OrderController {
 
     getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const restaurantId = req.params.id
-            const operation = 'Get-All-Restaurant-Orders'
-            const response: Message = (await orderServiceRabbitMqClient.produce({
-                restaurantId
-            }, operation)) as Message
+            // const restaurantId = req.params.id
+            // const operation = 'Get-All-Restaurant-Orders'
+            // const response: Message = (await orderServiceRabbitMqClient.produce({
+            //     restaurantId
+            // }, operation)) as Message
+            // res.status(200).json(response);
+            const restaurantId = req.params.id;
+            const {
+                page = '1',
+                limit = '10',
+                statusFilter = 'all',
+                searchTerm = '',
+                sortField = 'createdAt',
+                sortDirection = 'desc',
+            } = req.query;
+            const operation = 'Get-All-Restaurant-Orders';
+            const response: Message = (await orderServiceRabbitMqClient.produce(
+                {
+                    restaurantId,
+                    page: parseInt(page as string, 10),
+                    limit: parseInt(limit as string, 10),
+                    statusFilter: statusFilter as string,
+                    searchTerm: searchTerm as string,
+                    sortField: sortField as string,
+                    sortDirection: sortDirection as 'asc' | 'desc',
+                },
+                operation
+            )) as Message;
             res.status(200).json(response);
         } catch (error) {
             console.error('Error in get-order:', error);
@@ -105,9 +128,12 @@ export default class OrderController {
     getUsersOrders = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.params.id
+            const { page = '1', limit = '10' } = req.query;
             const operation = 'Get-User-Order'
             const response: Message = (await orderServiceRabbitMqClient.produce({
-                userId
+                userId,
+                page: parseInt(page as string, 10),
+                limit: parseInt(limit as string, 10),
             }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {

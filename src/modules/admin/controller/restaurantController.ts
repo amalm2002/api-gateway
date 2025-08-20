@@ -142,8 +142,14 @@ export default class restaurantController {
     getRestaurantChartData = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const operation = 'Get-Restaurant-Chart-Data';
-            const { startDate, endDate } = req.query;
-            const response: Message = (await restaurantRabbitMqClient.produce({ startDate, endDate }, operation)) as Message;
+            const { startDate, endDate, sortBy, order, limit } = req.query;
+            const response: Message = (await restaurantRabbitMqClient.produce({
+                startDate,
+                endDate,
+                sortBy,
+                order,
+                limit: limit ? Number(limit) : undefined
+            }, operation)) as Message;
             res.status(200).json(response);
         } catch (error) {
             console.log('Error in get restaurant chart data:', error);

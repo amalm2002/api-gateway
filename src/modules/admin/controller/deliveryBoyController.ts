@@ -352,8 +352,14 @@ export default class deliveryBoyController {
     getDeliveryBoyChartData = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const operation = 'Get-DeliveryBoy-Chart-Data';
-            const { startDate, endDate } = req.query;
-            const response: Message = (await deliveryBoyRabbitMqClient.produce({ startDate, endDate }, operation)) as Message;
+            const { startDate, endDate, sortBy, order, limit } = req.query;
+            const response: Message = (await deliveryBoyRabbitMqClient.produce({
+                startDate,
+                endDate,
+                sortBy,
+                order,
+                limit: limit ? Number(limit) : undefined
+            }, operation)) as Message;
             res.status(200).json(response);
         } catch (error) {
             console.log('Error in get delivery boy chart data:', error);
