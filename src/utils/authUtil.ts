@@ -1,8 +1,8 @@
 import { verifyToken, signAccessToken, signRefreshToken } from "./jwt";
 
 export class AuthUtility {
-  private readonly _accessSecret = process.env.ACCESS_TOKEN || "Amal";
-  private readonly _refreshSecret = process.env.REFRESH_TOKEN || "Amal";
+  private  _accessSecret = process.env.ACCESS_TOKEN || "Amal";
+  private  _refreshSecret = process.env.REFRESH_TOKEN || "Amal";
 
   verifyAccessToken(token: string): { id: string; role: string } {
     try {
@@ -27,6 +27,7 @@ export class AuthUtility {
 
     const accessToken = signAccessToken(payload, this._accessSecret);
     const refreshToken = signRefreshToken(payload, this._refreshSecret);
+    console.log(`Refresh token generated for user ${userId}: ${refreshToken}`);
 
     return { accessToken, refreshToken };
   }

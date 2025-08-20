@@ -9,13 +9,11 @@ export default class userController {
 
   CreateUser = async (req: Request, res: Response) => {
     try {
-      const token = req.cookies.otp
-      const otp = req.body.otp
       UserService.CreateUser(
         {
           ...req.body.formData,
           otp: req.body.otp,
-          token: req.cookies.otp
+          token: req.body.token
         },
         (err: any, result: { message: string, isAdmin: boolean }) => {
           if (err) {
@@ -204,9 +202,6 @@ export default class userController {
 
   GetUserById = async (req: Request, res: Response) => {
     try {
-      console.log('request body :', req.body);
-
-
       UserService.GetUserById({ id: req.params.id }, (err: any, result: any) => {
         if (err) {
           res.status(400).json({ message: err.message });
