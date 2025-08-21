@@ -8,7 +8,7 @@ export default class paymentTransactionController {
         try {
             PaymentService.PlaceOrder({
                 ...req.body
-            }, (err: any, result: { message: string, orderId: string, paymentId: string, success: boolean }) => {
+            }, (err: any, result: { message: string, orderId: string, paymentId: string, success: boolean, orderNumber: number; }) => {
                 if (err) {
                     res.status(400).json({ message: result.message });
                 } else {
@@ -16,7 +16,8 @@ export default class paymentTransactionController {
                         message: result.message,
                         orderId: result.orderId,
                         paymentId: result.paymentId,
-                        success: result.success
+                        success: result.success,
+                        orderNumber: result.orderNumber
                     });
                 }
             })
@@ -98,7 +99,7 @@ export default class paymentTransactionController {
                         maxAvailableQty: item.maxAvailableQty
                     }))
                 }
-            }, (err: any, result: { message: string, orderId: string, success: boolean }) => {
+            }, (err: any, result: { message: string, orderId: string, success: boolean, orderNumber: number }) => {
                 if (err) {
                     res.status(400).json({ message: err.message || "Something went wrong" });
                 } else {

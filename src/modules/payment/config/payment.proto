@@ -160,6 +160,7 @@ message PlaceOrderResponse {
   string message = 2;
   bool success = 3;
   string paymentId = 4;
+  int32 orderNumber = 5;
 }
 
 message VerifyUpiPaymentRequest {
@@ -175,6 +176,7 @@ message VerifyUpiPaymentResponse {
   string paymentId = 2;
   bool success = 3;
   string message = 4;
+  int32 orderNumber = 5;
 }
 
 message OrderData {
