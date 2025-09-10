@@ -10,10 +10,10 @@ COPY . .
 RUN npm run build
 
 RUN mkdir -p dist/modules/user/config \
- && cp src/modules/user/config/user.proto dist/modules/user/config/user.proto
+&& cp src/modules/user/config/user.proto dist/modules/user/config/user.proto
 
-RUN mkdir -p dist/modules/auth/config \
- && cp src/modules/auth/config/auth.proto dist/modules/auth/config/auth.proto
+RUN mkdir -p dist/modules/payment/config \
+    && cp src/modules/payment/config/payment.proto dist/modules/payment/config/payment.proto
 
 EXPOSE 5050
 

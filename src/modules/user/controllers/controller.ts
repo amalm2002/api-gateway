@@ -90,6 +90,7 @@ export default class userController {
         if (err) {
           res.status(400).json({ message: err })
         } else {
+          console.log('result :',result)
           res.status(200).json({
             user: result.name,
             userId: result._id,

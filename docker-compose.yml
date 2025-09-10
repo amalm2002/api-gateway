@@ -6,7 +6,6 @@ services:
     ports:
       - "5050:5050"
     env_file:
-      - .env
       - .env.docker
     networks:
       - backend
