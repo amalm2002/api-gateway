@@ -10,6 +10,7 @@
     "resolveJsonModule": true,         
     "skipLibCheck": true               
   },
-  "include": ["src/**/*", "src/**/*.proto"],
+  // "include": ["src/**/*", "src/**/*.proto"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
