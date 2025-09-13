@@ -26,6 +26,7 @@ class App {
   }
 
   private applyMiddleware(): void {
+    this.app.set('trust proxy', 1);
     this.app.use(morganMiddleware)
     this.app.use(express.json({ limit: '50mb' }));
     this.app.use(cors({
