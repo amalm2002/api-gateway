@@ -9,7 +9,7 @@ import { publicRoute, protectedRoute } from "./modules/user/route";
 import { publicRestaurantRoute, protectedRestaurantRoute } from "./modules/restaurant/route"
 import authRoute from "./modules/auth/route"
 import adminRoute from "./modules/admin/route";
-import {deliveryBoyPublicRoute,deliveryBoyProtectedRoute} from "./modules/deliveryBoy/route";
+import { deliveryBoyPublicRoute, deliveryBoyProtectedRoute } from "./modules/deliveryBoy/route";
 import { isValidated } from "./modules/auth/controller";
 import { logger, morganMiddleware } from "./middleware/centerlized-logging";
 import { generalRateLimiter } from "./middleware/rateLimiter";
@@ -55,8 +55,8 @@ class App {
 
   public startServer(port: number): void {
     this.server.listen(port, () => {
-      console.log(`API-Gateway started on ${port}`);   
-      console.log(logger)
+      console.log(`API-Gateway started on ${port}`);
+      logger.info("API Gateway has started successfully")
     });
   }
 }
