@@ -11,7 +11,7 @@ import authRoute from "./modules/auth/route"
 import adminRoute from "./modules/admin/route";
 import {deliveryBoyPublicRoute,deliveryBoyProtectedRoute} from "./modules/deliveryBoy/route";
 import { isValidated } from "./modules/auth/controller";
-import { morganMiddleware } from "./middleware/centerlized-logging";
+import { logger, morganMiddleware } from "./middleware/centerlized-logging";
 import { generalRateLimiter } from "./middleware/rateLimiter";
 
 class App {
@@ -56,6 +56,7 @@ class App {
   public startServer(port: number): void {
     this.server.listen(port, () => {
       console.log(`API-Gateway started on ${port}`);   
+      console.log(logger)
     });
   }
 }
