@@ -29,7 +29,7 @@ class App {
     this.app.use(morganMiddleware)
     this.app.use(express.json({ limit: '50mb' }));
     this.app.use(cors({
-      origin: process.env.CORS_ORGIN,
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     }));
 
