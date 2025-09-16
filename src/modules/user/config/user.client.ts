@@ -11,4 +11,13 @@ const UserService=new grpcObject.user_package.UserService(
     `${DOMAIN}:${process.env.USER_GRPC_PORT}`,grpc.credentials.createInsecure()
 )
 
+UserService.waitForReady(Date.now() + 10000, (error:any) => {
+  if (error) {
+    console.error('Failed to connect to gRPC service:', error);
+    console.error('Domain:', DOMAIN);
+  } else {
+    console.log('Successfully connected to gRPC service');
+  }
+});
+
 export {UserService}       
