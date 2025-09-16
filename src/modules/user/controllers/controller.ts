@@ -9,44 +9,20 @@ export default class userController {
 
   CreateUser = async (req: Request, res: Response) => {
     try {
-      // UserService.CreateUser(
-      //   {
-      //     ...req.body.formData,
-      //     otp: req.body.otp,
-      //     token: req.body.token
-      //   },
-      //   (err: any, result: { message: string, isAdmin: boolean }) => {
-      //     if (err) {
-      //       res.status(400).json({ message: result.message });
-      //     } else {
-      //       res.status(200).json({ message: result.message, isAdmin: result.isAdmin });
-      //     }
-      //   }
-      // );
-
       UserService.CreateUser(
         {
           ...req.body.formData,
           otp: req.body.otp,
           token: req.body.token
         },
-        (err: any, result: any) => {
-          console.log("📤 [API Gateway → UserService] CreateUser Request:", {
-            body: req.body
-          });
-          console.log("📥 [API Gateway ← UserService] CreateUser Response:", {
-            error: err,
-            result
-          });
-
+        (err: any, result: { message: string, isAdmin: boolean }) => {
           if (err) {
-            return res.status(400).json({ message: result?.message || err });
+            res.status(400).json({ message: result.message });
+          } else {
+            res.status(200).json({ message: result.message, isAdmin: result.isAdmin });
           }
-          res.status(200).json(result);
         }
       );
-
-
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -56,9 +32,15 @@ export default class userController {
   CheckUser = async (req: Request, res: Response) => {
     try {
       UserService.CheckUser(req.body, (err: any, result: { token: string; message: string }) => {
+
+        console.log(`📤 [API Gateway → UserService]`, req.body)
+
         if (err) {
           res.status(400).json({ message: err });
         } else {
+
+           console.log(`📥 [API Gateway ← UserService] Response:`, result);
+
           res.cookie('otp', result.token, {
             httpOnly: true,
             expires: new Date(Date.now() + 180000),
