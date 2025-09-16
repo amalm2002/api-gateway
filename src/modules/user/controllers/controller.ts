@@ -9,20 +9,44 @@ export default class userController {
 
   CreateUser = async (req: Request, res: Response) => {
     try {
+      // UserService.CreateUser(
+      //   {
+      //     ...req.body.formData,
+      //     otp: req.body.otp,
+      //     token: req.body.token
+      //   },
+      //   (err: any, result: { message: string, isAdmin: boolean }) => {
+      //     if (err) {
+      //       res.status(400).json({ message: result.message });
+      //     } else {
+      //       res.status(200).json({ message: result.message, isAdmin: result.isAdmin });
+      //     }
+      //   }
+      // );
+
       UserService.CreateUser(
         {
           ...req.body.formData,
           otp: req.body.otp,
           token: req.body.token
         },
-        (err: any, result: { message: string, isAdmin: boolean }) => {
+        (err: any, result: any) => {
+          console.log("📤 [API Gateway → UserService] CreateUser Request:", {
+            body: req.body
+          });
+          console.log("📥 [API Gateway ← UserService] CreateUser Response:", {
+            error: err,
+            result
+          });
+
           if (err) {
-            res.status(400).json({ message: result.message });
-          } else {
-            res.status(200).json({ message: result.message, isAdmin: result.isAdmin });
+            return res.status(400).json({ message: result?.message || err });
           }
+          res.status(200).json(result);
         }
       );
+
+
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -90,7 +114,7 @@ export default class userController {
         if (err) {
           res.status(400).json({ message: err })
         } else {
-          console.log('result :',result)
+          console.log('result :', result)
           res.status(200).json({
             user: result.name,
             userId: result._id,
