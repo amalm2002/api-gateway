@@ -36,6 +36,7 @@ export default class userController {
         console.log(`📤 [API Gateway → UserService]`, req.body)
 
         if (err) {
+          console.log('++++++++++++++ :',err)
           res.status(400).json({ message: err });
         } else {
 
