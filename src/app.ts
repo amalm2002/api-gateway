@@ -37,7 +37,7 @@ class App {
     this.app.use(compression());
     this.app.use(helmet());
     this.app.use(cookieParser());
-    this.app.use(generalRateLimiter)
+    // this.app.use(generalRateLimiter)
   }
 
   private routes(): void {
