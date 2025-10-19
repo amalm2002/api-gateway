@@ -18,7 +18,6 @@ export default class reviewController {
             }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.error('this error showing on the add review on food', error)
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     }
@@ -34,7 +33,6 @@ export default class reviewController {
             }, operation)) as Message;
             res.status(200).json(response);
         } catch (error) {
-            console.error('Error in deleteFoodReview:', error);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     };
@@ -50,7 +48,6 @@ export default class reviewController {
             }, operation)) as Message;
             res.status(200).json(response);
         } catch (error) {
-            console.error('Error in getUserReviewForFoodItem:', error);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     };
@@ -64,7 +61,6 @@ export default class reviewController {
             }, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.error('Error in getFoodReviews:', error);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     }

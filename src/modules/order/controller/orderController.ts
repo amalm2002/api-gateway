@@ -15,12 +15,6 @@ export default class OrderController {
 
     getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // const restaurantId = req.params.id
-            // const operation = 'Get-All-Restaurant-Orders'
-            // const response: Message = (await orderServiceRabbitMqClient.produce({
-            //     restaurantId
-            // }, operation)) as Message
-            // res.status(200).json(response);
             const restaurantId = req.params.id;
             const {
                 page = '1',

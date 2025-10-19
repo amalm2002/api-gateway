@@ -41,7 +41,6 @@ export default class menuController {
             const response = (await restaurantRabbitMqClient.produce(menuData, operation)) as Message;
             res.status(201).json(response);
         } catch (error) {
-            console.log('error on addMenuItem side :', error);
             const errorMessage = (error as Error).message;
             if (errorMessage === 'Menu item already exists') {
                 res.status(409).json({ message: errorMessage });
@@ -72,7 +71,6 @@ export default class menuController {
             const response = (await restaurantRabbitMqClient.produce(payload, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.log('error on getAllMenu side :', error);
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
@@ -84,7 +82,6 @@ export default class menuController {
             const response = (await restaurantRabbitMqClient.produce(restaurantId, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.log('error on get specific menu side :', error);
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
@@ -127,7 +124,6 @@ export default class menuController {
             const response = await restaurantRabbitMqClient.produce(updatedMenuData, operation) as Message;
             res.status(200).json(response);
         } catch (error) {
-            console.log('error on editMenuItem side :', error);
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
@@ -139,7 +135,6 @@ export default class menuController {
             const response = (await restaurantRabbitMqClient.produce(restaurantId, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.log('error on delete menu side :', error);
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
@@ -150,7 +145,6 @@ export default class menuController {
             const response = (await restaurantRabbitMqClient.produce({}, operation)) as Message
             res.status(200).json(response)
         } catch (error) {
-            console.log('error on get all details side :', error);
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
@@ -165,7 +159,6 @@ export default class menuController {
             )) as Message;
             res.status(200).json(response);
         } catch (error) {
-            console.log('Error in sortMenus controller:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     };
@@ -176,7 +169,6 @@ export default class menuController {
             const response: Message = (await restaurantRabbitMqClient.produce({ ...req.body }, operation)) as Message
             res.status(200).json(response);
         } catch (error) {
-            console.log('Error in updateMenuQuantityMenuItems controller:', error);
             res.status(500).json({ message: 'Internal Server Error' });
         }
     }
@@ -189,10 +181,8 @@ export default class menuController {
         try {
             const operation = 'Update-Menu-Quantity-Cancel-Order';
             const result = await restaurantRabbitMqClient.produce(refundData, operation);
-            console.log('Menu quantity updated in restaurant service:', result);
             return result;
         } catch (error) {
-            console.error('Error updating menu quantity:', error);
             return { success: false, message: 'Failed to update menu quantity' };
         }
     }

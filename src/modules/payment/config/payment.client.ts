@@ -19,8 +19,6 @@ const grpcObject = (grpc.loadPackageDefinition(packageDef) as unknown) as any
 const DOMAIN = process.env.PAYMENT_GRPC_HOST || 'payment-service';
 const PORT = process.env.PAYMENT_GRPC_PORT || '3008';
 
-console.log(`Connecting to PaymentService at ${DOMAIN}:${PORT}`);
-
 const PaymentService = new grpcObject.payment_package.PaymentService(
     `${DOMAIN}:${PORT}`,
     grpc.credentials.createInsecure()

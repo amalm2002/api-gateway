@@ -153,7 +153,6 @@ export default class paymentTransactionController {
                 if (err) {
                     res.status(400).json({ message: result.message });
                 } else {
-                    console.log('create response :', result);
                     res.status(200).json({
                         error: result.error,
                         orderId: result.orderId,
@@ -185,7 +184,6 @@ export default class paymentTransactionController {
                 if (err) {
                     res.status(400).json({ message: err.message || "Something went wrong" });
                 } else {
-                    console.log('verify delivery-boy payment response :', result);
                     res.status(200).json(result);
                 }
             })
@@ -219,8 +217,6 @@ export default class paymentTransactionController {
                 if (err) {
                     res.status(400).json({ message: err.message || 'Failed to fetch delivery-boy InHand payment history' });
                 } else {
-                    console.log('result :', result);
-
                     res.status(200).json(result);
                 }
             })

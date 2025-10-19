@@ -66,10 +66,6 @@ export default class authenticationController {
                 const url = await uploadToS3(files['profileImage'][0]);
                 data['profileImage'] = url;
             }
-
-            console.log('Data to send:', data);
-
-
             const operation = 'Delivery-Boy-Details';
             const response: Message = (await deliveryBoyRabbitMqClient.produce(
                 { ...data, ...req.query },
