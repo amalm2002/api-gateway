@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: amalm2002/api-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5050
+          env:
+            # Environment
+            - name: NODE_ENV
+              value: "production"
+            - name: CORS_ORIGIN
+              # value: "https://eatzaa-food-hub.vercel.app"
+              value: "https://eatzaa.vercel.app"
+
+            # gRPC Service Hosts & Ports
+            - name: USER_GRPC_HOST
+              value: "user-service"
+            - name: USER_GRPC_PORT
+              value: "3003"
+            - name: PAYMENT_GRPC_HOST
+              value: "payment-service"
+            - name: PAYMENT_GRPC_PORT
+              value: "3008"
+
+            # Secrets
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: RABBITMQ_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: REDIS_URL
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: AWS_S3_BUCKET
+            - name: AWS_S3_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: AWS_S3_REGION
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: JWT_SECRET
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: ACCESS_TOKEN
+            - name: REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-secrets
+                  key: REFRESH_TOKEN
